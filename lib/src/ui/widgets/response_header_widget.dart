@@ -11,9 +11,38 @@ class ResponseHeaderWidget extends StatelessWidget {
   final HttpRecord model;
   @override
   Widget build(BuildContext context) {
+    final headers = model.response?.headers.map ?? model.dioException?.response?.headers.map;
+
+    if (headers == null) {
+      return const SizedBox.shrink();
+    }
+
     return TitleContentPannelWidget(
       title: 'Response Headers',
-      content: model.responseHeadersString,
+      contentWidget: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: headers.entries.map((e) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${e.key}: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    e.value.join(', '),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }

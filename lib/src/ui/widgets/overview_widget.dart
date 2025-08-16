@@ -13,6 +13,8 @@ class OverviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final queryParameters = model.requestOptions.uri.queryParametersAll;
+
     return PannelWidget(
       title: Row(
         children: [
@@ -44,9 +46,15 @@ class OverviewWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Text(
-              model.requestOptions.uri.toString(),
-              style: Theme.of(context).textTheme.titleMedium,
+              model.requestOptions.uri.origin + model.requestOptions.uri.path,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
+            if (queryParameters.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              _buildQueryParameters(context, queryParameters),
+            ],
             Text(
               model.requestOptions.contentType ?? '',
               style: Theme.of(context).textTheme.titleMedium,
@@ -54,6 +62,46 @@ class OverviewWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildQueryParameters(
+    BuildContext context,
+    Map<String, List<String>> queryParameters,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Query Parameters',
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        ...queryParameters.entries.map((e) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${e.key}: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    e.value.join(', '),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ],
     );
   }
 }

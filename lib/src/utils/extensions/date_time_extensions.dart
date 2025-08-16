@@ -8,4 +8,8 @@ extension DateTimeExtensions on DateTime {
   String formattedTimeString() {
     return '''${hour.asTwoDigits()}:${minute.asTwoDigits()}:${second.asTwoDigits()}''';
   }
+
+  String formattedHourMinuteString() {
+    return '''${hour.asTwoDigits()}:${minute.asTwoDigits()}''';
+  }
 }

@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 class TitleContentPannelWidget extends StatelessWidget {
   const TitleContentPannelWidget({
     required this.title,
-    required this.content,
+    this.content,
+    this.contentWidget,
     super.key,
-  });
+  }) : assert(content != null || contentWidget != null);
   final String title;
-  final String content;
+  final String? content;
+  final Widget? contentWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +37,11 @@ class TitleContentPannelWidget extends StatelessWidget {
       ),
       content: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Text(
-          content,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        child: contentWidget ??
+            Text(
+              content!,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
       ),
     );
   }

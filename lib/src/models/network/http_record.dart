@@ -12,6 +12,7 @@ class HttpRecord {
     this.startTime,
   });
 
+  bool isFavorite = false;
   DateTime? startTime;
   DateTime? endTime;
 

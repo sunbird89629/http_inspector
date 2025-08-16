@@ -150,27 +150,18 @@ Refer to the source for full API details.
 
 ## Roadmap
 
-### 📑 Request Display Optimization
-- [ ] Display Request Headers in **Key-Value** format  
-- [ ] Parse Query parameters into a **list view**  
-- [ ] Add **payload display** for POST requests  
-- [ ] Bold the URL display item  
-
-### ⭐ Feature Enhancements
-- [ ] Add **favorite interface** feature in the list  
-- [ ] Add a **clear button**  
-- [ ] Add **time grouping by minute**  
-- [ ] Add **filter support** for the displayed list  
-- [ ] Add **domain-based filter**  
-
-### ⚡ Advanced Interactions
-- [ ] Add the ability to **modify query parameters and send requests**  
+- [x] Display Request Headers in **Key-Value** format  
+- [x] Parse Query parameters into a **list view**  
+- [x] Add **payload display** for POST requests  
+- [x] Bold the URL display item  
+- [x] Add **favorite interface** feature in the list  
+- [x] Add a **clear button**  
+- [x] Add **time grouping by minute**  
+- [x] Add **filter support** for the displayed list  
+- [x] Add **domain-based filter**  
+- [x] Add the ability to **modify query parameters and send requests**  
   - Should be distinguished from normal network requests, can refer to Charles for interaction  
 - [ ] Add **adaptive functionality** to integrate with other PC-based packet capture tools  
-
-### 🛠 Other Items
-- [ ] Add a **usage tutorial button**  
-- [ ] Continue reading the following articles  
 
 ---
 

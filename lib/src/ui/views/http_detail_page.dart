@@ -4,8 +4,10 @@ import 'package:http_inspector/src/ui/widgets/curl_widget.dart';
 import 'package:http_inspector/src/ui/widgets/error_body_widget.dart';
 import 'package:http_inspector/src/ui/widgets/overview_widget.dart';
 import 'package:http_inspector/src/ui/widgets/request_header_widget.dart';
+import 'package:http_inspector/src/ui/widgets/request_body_widget.dart';
 import 'package:http_inspector/src/ui/widgets/response_body_widget.dart';
 import 'package:http_inspector/src/ui/widgets/response_header_widget.dart';
+import 'package:http_inspector/src/ui/views/edit_request_page.dart';
 import 'package:http_inspector/src/ui/widgets/title_bar_action_widget.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,16 @@ class HttpDetailPage extends StatelessWidget {
           title: Text(model.requestOptions.uri.pathSegments.last),
           actions: [
             TitleBarActionWidget(
+              iconData: Icons.edit,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditRequestPage(record: model),
+                  ),
+                );
+              },
+            ),
+            TitleBarActionWidget(
               iconData: Icons.bookmark_add_rounded,
               onPressed: () {},
             ),
@@ -47,6 +59,7 @@ class HttpDetailPage extends StatelessWidget {
                 _buildResultWidget(),
                 CurlWidget(model: model),
                 RequestHeaderWidget(model: model),
+                RequestBodyWidget(model: model),
                 ResponseHeaderWidget(model: model),
                 const SizedBox(height: 80),
               ],

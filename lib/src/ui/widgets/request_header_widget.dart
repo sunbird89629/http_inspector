@@ -12,9 +12,34 @@ class RequestHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final headers = model.requestOptions.headers;
+
     return TitleContentPannelWidget(
       title: 'Request Headers',
-      content: model.requestOptions.headers.toString(),
+      contentWidget: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: headers.entries.map((e) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${e.key}: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    e.value.toString(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
