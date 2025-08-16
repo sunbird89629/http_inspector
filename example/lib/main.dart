@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:example/models/login_request.dart';
 import 'package:example/models/login_response.dart';
-import 'package:http_inspector/fancy_dio_inspector_personal.dart';
-
-/// Import the `fancy_dio_inspector` package.
 import 'package:flutter/material.dart';
+import 'package:http_inspector/http_inspector.dart';
 
 void main() {
   /// Initialize your `Dio` client.
