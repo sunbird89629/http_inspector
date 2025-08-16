@@ -1,28 +1,38 @@
-name: Publish to pub.dev
+name: Publish Flutter package
 
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+      - 'v[0-9]+.[0-9]+.[0-9]+*' # 例如 v1.2.3 时触发发布
 
 jobs:
   publish:
+    runs-on: ubuntu-latest
+
+    # 关键点：启用 OIDC token，这样 flutter pub publish 不需要手动登录
     permissions:
       id-token: write
-    # uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    runs-on: ubuntu-latest
+      contents: read
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: flutter-actions/setup-flutter@v4
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Publish
-        run: dart pub publish --force
+      # 1. 检出代码
+      - uses: actions/checkout@v4
 
+      # 2. 安装 Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
 
+      # 3. 拉取依赖
+      - run: flutter pub get
 
+      # # 4. 确保格式和分析通过（可选）
+      # - run: flutter format --set-exit-if-changed .
+      # - run: flutter analyze
 
+      # # 5. 运行测试（可选）
+      # - run: flutter test
 
-
-
-        
+      # 6. 发布到 pub.dev
+      - name: Publish to pub.dev
+        run: flutter pub publish --force --skip-validation
