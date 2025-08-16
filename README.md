@@ -1,17 +1,16 @@
-## Fancy Dio Inspector
+## Http Inspector
 
 A lightweight in-app inspector for `Dio` that logs every request, response and error, and provides a UI to browse details, headers and bodies, as well as copy a ready-to-run cURL command.
 
-
-
-<img src="assets/screenshots/screenshot_1.png" alt="Fancy Dio Inspector screenshot" height="500" />
+<img src="assets/screenshots/screenshot_1.png" height="400" />
+<img src="assets/screenshots/screenshot_2.png" height="400" />
 
 ---
 
 ### Features
 
 - **Real-time logs**: Capture requests, responses, and errors with timestamps and durations
-- **In-app viewer**: `FancyDioInspectorView` and `HttpScopeView` to inspect logs in-app
+- **In-app viewer**:`HttpScopeView` to inspect logs in-app
 - **cURL export**: One-click copy of the generated cURL for any request
 - **Pretty JSON**: Formatted request/response bodies and headers
 - **Search/filter UI**: Quickly locate requests with the built-in search components
@@ -34,7 +33,7 @@ Add dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  fancy_dio_inspector_personal: ^1.0.1
+  http_inspector: ^1.0.2
 ```
 
 Then run `flutter pub get`.
@@ -43,7 +42,7 @@ Then run `flutter pub get`.
 
 ## Quick Start
 
-1) Add `FancyDioInterceptor` to your `Dio` instance:
+1) Add `HttpInspectorInterceptor` to your `Dio` instance:
 
 ```dart
 import 'package:dio/dio.dart';
@@ -52,7 +51,7 @@ import 'package:http_inspector/http_inspector.dart';
 final dio = Dio();
 
 dio.interceptors.add(
-  FancyDioInterceptor(
+  HttpInspectorInterceptor(
     options: const FancyDioInspectorOptions(
       consoleOptions: FancyDioInspectorConsoleOptions(verbose: true),
     ),
@@ -89,7 +88,7 @@ MaterialApp(
 ### Options
 
 ```dart
-FancyDioInterceptor(
+HttpInspectorInterceptor(
   options: const FancyDioInspectorOptions(
     maxLogs: 200, // keep at most 200 entries in memory
     consoleOptions: FancyDioInspectorConsoleOptions(
@@ -140,7 +139,7 @@ flutter run
 
 ## API Overview
 
-- **Interceptor**: `FancyDioInterceptor`
+- **Interceptor**: `HttpInspectorInterceptor`
 - **Options**: `FancyDioInspectorOptions`, `FancyDioInspectorConsoleOptions`, `FancyDioInspectorTileOptions`, `FancyDioInspectorL10nOptions`
 - **Views**: `FancyDioInspectorView`, `HttpScopeView`
 - **Models**: `NetworkRequestModel`, `NetworkResponseModel`, `NetworkErrorModel`, `HttpRecord`

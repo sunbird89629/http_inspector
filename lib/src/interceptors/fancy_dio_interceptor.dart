@@ -3,7 +3,7 @@ import 'package:http_inspector/src/loggers/fancy_dio_logger.dart';
 import 'package:http_inspector/src/models/models.dart';
 import 'package:http_inspector/src/typedefs/typedefs.dart';
 
-class FancyDioInterceptor extends Interceptor {
+class HttpInspectorInterceptor extends Interceptor {
   FancyDioLogger get logger => FancyDioLogger.instance;
 
   final FancyDioInspectorOptions options;
@@ -12,7 +12,7 @@ class FancyDioInterceptor extends Interceptor {
   final OnResponseCreated? onResponseCreated;
   final OnErrorCreated? onErrorCreated;
 
-  FancyDioInterceptor({
+  HttpInspectorInterceptor({
     this.options = const FancyDioInspectorOptions(),
     this.onRequestCreated,
     this.onResponseCreated,

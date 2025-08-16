@@ -1,4 +1,4 @@
-# Fancy Dio Inspector 使用手册
+# HTTP Inspector 使用手册
 
 本手册介绍如何在应用内查看并分析通过 Dio 发起的 HTTP 请求与响应。
 
@@ -48,7 +48,7 @@ HttpScopeView(
 ```dart
 const HttpScopeView(
   viewConfig: HttpScopeViewConfig(
-    manualUrl: 'https://sunbird89629.github.io/fancy_dio_inspector/manual',
+    manualUrl: 'https://sunbird89629.github.io/http_inspector/manual',
   ),
 )
 ```
@@ -60,8 +60,8 @@ const HttpScopeView(
    - 如果使用 “Deploy from a branch”，建议选择分支 `main`，文件夹 `docs` 或 `root`（若选择 `docs`，请将本文件放至 `docs/manual.md`）。
    - 或选择 “GitHub Actions” 以使用 Actions 部署静态站点（Jekyll/静态渲染均可）。
 3. 启用完成后，页面地址通常为：
-   - `https://sunbird89629.github.io/fancy_dio_inspector/manual`（Jekyll 会将 `.md` 转为 HTML）。
+   - `https://sunbird89629.github.io/http_inspector/manual`（Jekyll 会将 `.md` 转为 HTML）。
 4. 将该地址配置到 `HttpScopeViewConfig.manualUrl`，应用内标题栏帮助按钮即可打开。
 
 > 备注：若暂未启用 GitHub Pages，默认会打开仓库内的 `docs/manual.md` 文件地址：
-> `https://github.com/sunbird89629/fancy_dio_inspector/blob/main/docs/manual.md`
+> `https://github.com/sunbird89629/http_inspector/blob/main/docs/manual.md`

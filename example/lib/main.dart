@@ -123,7 +123,7 @@ class DioClient {
 
     /// Add the `FancyDioInterceptor` to the `Dio` client.
     _dio.interceptors.add(
-      FancyDioInterceptor(
+      HttpInspectorInterceptor(
         options: const FancyDioInspectorOptions(
           consoleOptions: FancyDioInspectorConsoleOptions(verbose: true),
         ),
