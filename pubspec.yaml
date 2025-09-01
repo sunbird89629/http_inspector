@@ -5,7 +5,7 @@ description: A lightweight in-app inspector for HTTP requests and responses usin
 version: 1.0.2
 
 screenshots:
-  - description: "Fancy Dio Inspector"
+  - description: "Http Inspector"
     path: assets/screenshots/screenshot_1.png
 
 environment:

@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http_inspector/src/interceptors/http_scope_view_config.dart';
 import 'package:http_inspector/src/loggers/fancy_dio_logger.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
@@ -49,7 +48,7 @@ class HttpScopeView extends StatefulWidget {
 
 class _HttpScopeViewState extends State<HttpScopeView> {
   bool _showOnlyFavorites = false;
-  bool _isSearch = false;
+  final bool _isSearch = false;
   final _searchController = TextEditingController();
   String? _domainFilter;
   final _domainFilterController = TextEditingController();
@@ -95,21 +94,21 @@ class _HttpScopeViewState extends State<HttpScopeView> {
           // bottom: TabBar(tabs: tabs),
           leading: widget.leading,
           actions: [
-            TitleBarActionWidget(
-              iconData: Icons.filter_alt,
-              onPressed: _showDomainFilterDialog,
-            ),
-            TitleBarActionWidget(
-              iconData: Icons.search,
-              onPressed: () {
-                setState(() {
-                  _isSearch = !_isSearch;
-                  if (!_isSearch) {
-                    _searchController.clear();
-                  }
-                });
-              },
-            ),
+            // TitleBarActionWidget(
+            //   iconData: Icons.filter_alt,
+            //   onPressed: _showDomainFilterDialog,
+            // ),
+            // TitleBarActionWidget(
+            //   iconData: Icons.search,
+            //   onPressed: () {
+            //     setState(() {
+            //       _isSearch = !_isSearch;
+            //       if (!_isSearch) {
+            //         _searchController.clear();
+            //       }
+            //     });
+            //   },
+            // ),
             TitleBarActionWidget(
               iconData: _showOnlyFavorites ? Icons.star : Icons.star_border,
               onPressed: () {
@@ -117,65 +116,6 @@ class _HttpScopeViewState extends State<HttpScopeView> {
                   _showOnlyFavorites = !_showOnlyFavorites;
                 });
               },
-            ),
-            TitleBarActionWidget(
-              iconData: Icons.help_outline,
-              onPressed: () async {
-                final url = widget.viewConfig.manualUrl ??
-                    'https://github.com/sunbird89629/fancy_dio_inspector/blob/main/docs/manual.md';
-                final opener = widget.viewConfig.onOpenManual;
-                if (opener != null) {
-                  opener(url);
-                  return;
-                }
-
-                // Capture navigation and messenger before async gaps to avoid
-                // using BuildContext across async boundaries.
-                final navigator = Navigator.of(context);
-                final messenger = ScaffoldMessenger.of(context);
-
-                // Try to open with url_launcher first
-                final uri = Uri.parse(url);
-                final launched = await launchUrl(
-                  uri,
-                  mode: LaunchMode.externalApplication,
-                );
-
-                if (!launched) {
-                  if (!navigator.mounted) return;
-                  // Fallback: show dialog with copy-to-clipboard
-                  // ignore: use_build_context_synchronously
-                  await showDialog<void>(
-                    context: navigator.context,
-                    builder: (ctx) {
-                      return AlertDialog(
-                        title: const Text('打开使用手册'),
-                        content: SelectableText(url),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: url));
-                              Navigator.of(ctx).pop();
-                              messenger.showSnackBar(
-                                const SnackBar(content: Text('链接已复制')),
-                              );
-                            },
-                            child: const Text('复制链接'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(),
-                            child: const Text('关闭'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-            TitleBarActionWidget(
-              iconData: Icons.tune,
-              onPressed: () {},
             ),
             TitleBarActionWidget(
               iconData: Icons.clear_all,
@@ -200,6 +140,22 @@ class _HttpScopeViewState extends State<HttpScopeView> {
                 mainDataProvider.httpRecords = FancyDioLogger.instance.records;
               },
             ),
+            TitleBarActionWidget(
+              iconData: Icons.help_outline,
+              onPressed: () {
+                const url =
+                    'https://sunbird89629.github.io/http_inspector/manual';
+                final uri = Uri.parse(url);
+                launchUrl(
+                  uri,
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+            ),
+            // TitleBarActionWidget(
+            //   iconData: Icons.tune,
+            //   onPressed: () {},
+            // ),
           ],
         ),
         // body: TabBarView(children: tabBarViews),
@@ -270,43 +226,6 @@ class _HttpScopeViewState extends State<HttpScopeView> {
               ],
             );
           },
-        );
-      },
-    );
-    // return ValueListenableBuilder<List<HttpRecord>>(...)
-  }
-
-  void _showDomainFilterDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Filter by domain'),
-          content: TextField(
-            controller: _domainFilterController,
-            decoration: const InputDecoration(hintText: 'e.g., google.com'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _domainFilter = null;
-                  _domainFilterController.clear();
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('Clear'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _domainFilter = _domainFilterController.text;
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('Apply'),
-            ),
-          ],
         );
       },
     );

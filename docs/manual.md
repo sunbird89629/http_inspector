@@ -49,7 +49,7 @@ dio.interceptors.add(FancyDioInterceptor());
 ```dart
 Navigator.of(context).push(
   MaterialPageRoute(
-    builder: (_) => const HttpScopeView(), // 或 FancyDioInspectorView()
+    builder: (_) => const HttpScopeView(), 
   ),
 );
 ```
