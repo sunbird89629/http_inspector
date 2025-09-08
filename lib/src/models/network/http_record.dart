@@ -30,6 +30,9 @@ class HttpRecord {
     }
   }
 
+  String get url => requestOptions.uri.toString();
+  String get host => requestOptions.uri.host;
+
   String get duration {
     if (startTime == null || endTime == null) return '';
     final theStartTime = startTime!;
