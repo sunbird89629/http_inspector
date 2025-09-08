@@ -1,17 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/theme/theme.dart';
 import 'package:http_inspector/src/ui/views/http_detail_page.dart';
 import 'package:http_inspector/src/ui/views/http_scope_view.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
-import 'package:flutter/material.dart';
 
 class HttpRecordItemWidget extends StatefulWidget {
   const HttpRecordItemWidget({
-    required this.model,
+    required this.record,
     super.key,
   });
 
-  final HttpRecord model;
+  final HttpRecord record;
 
   @override
   State<HttpRecordItemWidget> createState() => _HttpRecordItemWidgetState();
@@ -25,21 +25,21 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
       child: ListTile(
         leading: Container(
           width: 4,
-          color: widget.model.statusColor,
+          color: widget.record.statusColor,
         ),
         title: Row(
           children: [
             SizedBox(
               width: 80,
               child: Text(
-                widget.model.requestOptions.method,
+                widget.record.requestOptions.method,
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.w900,
                     ),
               ),
             ),
             Text(
-              widget.model.statusCode.toString(),
+              widget.record.statusCode.toString(),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: FancyColors.blue,
@@ -47,7 +47,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
             ),
             const SizedBox(width: 20),
             Text(
-              widget.model.startTime?.formattedTimeString() ?? '',
+              widget.record.startTime?.formattedTimeString() ?? '',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: FancyColors.yellow,
@@ -55,7 +55,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
             ),
             const SizedBox(width: 20),
             Text(
-              widget.model.duration,
+              widget.record.duration,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: FancyColors.pink,
@@ -64,7 +64,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
           ],
         ),
         subtitle: Text(
-          widget.model.requestOptions.uri.path,
+          widget.record.requestOptions.uri.path,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -76,12 +76,12 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
           children: [
             IconButton(
               icon: Icon(
-                widget.model.isFavorite ? Icons.star : Icons.star_border,
-                color: widget.model.isFavorite ? Colors.amber : null,
+                widget.record.isFavorite ? Icons.star : Icons.star_border,
+                color: widget.record.isFavorite ? Colors.amber : null,
               ),
               onPressed: () {
                 setState(() {
-                  widget.model.isFavorite = !widget.model.isFavorite;
+                  widget.record.isFavorite = !widget.record.isFavorite;
                 });
                 mainDataProvider.notifyListeners();
               },
@@ -95,7 +95,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
           // 假设你有一个详情页，比如 NetworkDetailPage
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => HttpDetailPage(model: widget.model),
+              builder: (context) => HttpDetailPage(model: widget.record),
             ),
           );
         },

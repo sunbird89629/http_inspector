@@ -4,7 +4,6 @@ import 'package:http_inspector/src/interceptors/http_scope_view_config.dart';
 import 'package:http_inspector/src/loggers/fancy_dio_logger.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/providers/main_data_provider.dart';
-import 'package:http_inspector/src/ui/widgets/http_record_item_widget.dart';
 import 'package:http_inspector/src/ui/widgets/title_bar_action_widget.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,7 +49,7 @@ class _HttpScopeViewState extends State<HttpScopeView> {
   bool _showOnlyFavorites = false;
   final bool _isSearch = false;
   final _searchController = TextEditingController();
-  String? _domainFilter;
+  // String? _domainFilter;
   final _domainFilterController = TextEditingController();
 
   @override
@@ -94,21 +93,6 @@ class _HttpScopeViewState extends State<HttpScopeView> {
           // bottom: TabBar(tabs: tabs),
           leading: widget.leading,
           actions: [
-            // TitleBarActionWidget(
-            //   iconData: Icons.filter_alt,
-            //   onPressed: _showDomainFilterDialog,
-            // ),
-            // TitleBarActionWidget(
-            //   iconData: Icons.search,
-            //   onPressed: () {
-            //     setState(() {
-            //       _isSearch = !_isSearch;
-            //       if (!_isSearch) {
-            //         _searchController.clear();
-            //       }
-            //     });
-            //   },
-            // ),
             TitleBarActionWidget(
               iconData: _showOnlyFavorites ? Icons.star : Icons.star_border,
               onPressed: () {
@@ -126,14 +110,6 @@ class _HttpScopeViewState extends State<HttpScopeView> {
                     duration: Duration(seconds: 3),
                   ),
                 );
-                // ScaffoldMessenger.of(context).showMaterialBanner(
-                //   const MaterialBanner(
-                //     content: Text('为防止误触，请长按以删除历史记录'),
-                //     actions: [
-                //       SizedBox.shrink(),
-                //     ],
-                //   ),
-                // );
               },
               onLongPress: () {
                 FancyDioLogger.instance.records.clear();
@@ -152,10 +128,6 @@ class _HttpScopeViewState extends State<HttpScopeView> {
                 );
               },
             ),
-            // TitleBarActionWidget(
-            //   iconData: Icons.tune,
-            //   onPressed: () {},
-            // ),
           ],
         ),
         // body: TabBarView(children: tabBarViews),
@@ -170,18 +142,19 @@ class _HttpScopeViewState extends State<HttpScopeView> {
       builder: (context, child) {
         final httpRecords = mainDataProvider.httpRecords.where(
           (record) {
-            final filter = widget.viewConfig.recordFilter?.call(record) ?? true;
+            final filter = widget.viewConfig.recordFilter.call(record);
             final favorite = !_showOnlyFavorites || record.isFavorite;
-            final search = _searchController.text.isEmpty ||
-                record.requestOptions.uri
-                    .toString()
-                    .toLowerCase()
-                    .contains(_searchController.text.toLowerCase());
-            final domain = _domainFilter == null ||
-                record.requestOptions.uri.host
-                    .toLowerCase()
-                    .contains(_domainFilter!.toLowerCase());
-            return filter && favorite && search && domain;
+            // final search = _searchController.text.isEmpty ||
+            //     record.requestOptions.uri
+            //         .toString()
+            //         .toLowerCase()
+            //         .contains(_searchController.text.toLowerCase());
+            // final domain = _domainFilter == null ||
+            //     record.requestOptions.uri.host
+            //         .toLowerCase()
+            //         .contains(_domainFilter!.toLowerCase());
+            // return filter && favorite && search && domain;
+            return filter && favorite;
           },
         ).toList();
 
@@ -220,7 +193,8 @@ class _HttpScopeViewState extends State<HttpScopeView> {
                   itemCount: records.length,
                   itemBuilder: (context, index) {
                     final model = records[index];
-                    return HttpRecordItemWidget(model: model);
+                    // return HttpRecordItemWidget(model: model);
+                    return widget.viewConfig.itemBuilder(context, model);
                   },
                 ),
               ],

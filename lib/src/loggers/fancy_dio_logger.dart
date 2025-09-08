@@ -7,7 +7,6 @@ import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/utils/enums/enums.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 
-/// A fancy logger that logs network requests, responses and errors.
 class FancyDioLogger {
   FancyDioLogger._();
   static final FancyDioLogger instance = FancyDioLogger._();
