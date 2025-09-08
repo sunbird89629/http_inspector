@@ -35,17 +35,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  // void openDioInspector(BuildContext context) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => FancyDioInspectorView(
-  //         leading: CloseButton(onPressed: Navigator.of(context).pop),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   void openHttpScopePage(BuildContext context) {
     Navigator.push(
       context,
@@ -62,14 +51,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fancy Dio Inspector Example',
+      title: 'Http Inspector Example',
       home: Builder(
         builder: (context) => Scaffold(
           body: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('Fancy Dio Inspector'),
+                const Text('Http Inspector'),
                 const SizedBox(height: 16),
                 const SizedBox(height: 8),
                 ElevatedButton(
@@ -100,7 +89,7 @@ class _MyAppState extends State<MyApp> {
                 ElevatedButton(
                   // onPressed: () => openDioInspector(context),
                   onPressed: () => openHttpScopePage(context),
-                  child: const Text('Open FancyDioInspectorView'),
+                  child: const Text('Open HttpDioInspectorView'),
                 ),
                 Text('Token: $token'),
               ],
@@ -124,8 +113,8 @@ class DioClient {
     /// Add the `FancyDioInterceptor` to the `Dio` client.
     _dio.interceptors.add(
       HttpInspectorInterceptor(
-        options: const FancyDioInspectorOptions(
-          consoleOptions: FancyDioInspectorConsoleOptions(verbose: true),
+        options: const HttpDioInspectorOptions(
+          consoleOptions: HttpDioInspectorConsoleOptions(verbose: true),
         ),
       ),
     );

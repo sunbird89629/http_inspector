@@ -1,29 +1,29 @@
 import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http_inspector/src/models/models.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/utils/enums/enums.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
-import 'package:flutter/foundation.dart';
 
 /// A fancy logger that logs network requests, responses and errors.
 class FancyDioLogger {
   FancyDioLogger._();
   static final FancyDioLogger instance = FancyDioLogger._();
 
-  FancyDioInspectorOptions options = const FancyDioInspectorOptions();
-  FancyDioInspectorConsoleOptions get consoleOptions => options.consoleOptions;
+  HttpDioInspectorOptions options = const HttpDioInspectorOptions();
+  HttpDioInspectorConsoleOptions get consoleOptions => options.consoleOptions;
 
-  List<NetworkRequestModel> _apiRequests = [];
-  List<NetworkResponseModel> _apiResponses = [];
-  List<NetworkErrorModel> _apiErrors = [];
+  // List<NetworkRequestModel> _apiRequests = [];
+  // List<NetworkResponseModel> _apiResponses = [];
+  // List<NetworkErrorModel> _apiErrors = [];
 
   final List<HttpRecord> _records = [];
 
-  List<NetworkRequestModel> get apiRequests => [..._apiRequests];
-  List<NetworkResponseModel> get apiResponses => [..._apiResponses];
-  List<NetworkErrorModel> get apiErrors => [..._apiErrors];
+  // List<NetworkRequestModel> get apiRequests => [..._apiRequests];
+  // List<NetworkResponseModel> get apiResponses => [..._apiResponses];
+  // List<NetworkErrorModel> get apiErrors => [..._apiErrors];
 
   /// [T] must be either [RequestOptions], [Response] or [DioException].
   void log<T>(T data) {
@@ -41,13 +41,11 @@ class FancyDioLogger {
         time: now,
       );
 
-      _apiRequests.insert(0, requestModel);
-
+      // _apiRequests.insert(0, requestModel);
       if (consoleOptions.verbose) {
         consoleLog(model: requestModel);
       }
-
-      _apiRequests = _apiRequests.take(options.maxLogs).toList();
+      // _apiRequests = _apiRequests.take(options.maxLogs).toList();
       _records.insert(0, HttpRecord(requestOptions: data, startTime: now));
     } else if (data is Response) {
       final responseModel = NetworkResponseModel(
@@ -62,12 +60,12 @@ class FancyDioLogger {
         elapsedDuration: data.calculateElapsedDuration(),
       );
 
-      _apiResponses.insert(0, responseModel);
+      // _apiResponses.insert(0, responseModel);
 
       if (consoleOptions.verbose) {
         consoleLog(model: responseModel);
       }
-      _apiResponses = _apiResponses.take(options.maxLogs).toList();
+      // _apiResponses = _apiResponses.take(options.maxLogs).toList();
       final record = _records.firstWhere(
         (element) => element.requestOptions == data.requestOptions,
       );
@@ -86,14 +84,12 @@ class FancyDioLogger {
         elapsedDuration: data.calculateElapsedDuration(),
       );
 
-      _apiErrors.insert(0, errorModel);
+      // _apiErrors.insert(0, errorModel);
 
       if (consoleOptions.verbose) {
         consoleLog(model: errorModel);
       }
-
-      _apiErrors = _apiErrors.take(options.maxLogs).toList();
-
+      // _apiErrors = _apiErrors.take(options.maxLogs).toList();
       final record = _records.firstWhere(
         (element) => element.requestOptions == data.requestOptions,
       );

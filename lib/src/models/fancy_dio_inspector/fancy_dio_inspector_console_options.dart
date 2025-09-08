@@ -1,7 +1,7 @@
 import 'package:http_inspector/src/l10n/l10n.dart';
 import 'package:http_inspector/src/utils/enums/enums.dart';
 
-class FancyDioInspectorConsoleOptions {
+class HttpDioInspectorConsoleOptions {
   /// It controls whether to log to the console or not.
   final bool verbose;
 
@@ -30,7 +30,7 @@ class FancyDioInspectorConsoleOptions {
   /// be `true`. If [colorize] is `false`, this option is ignored.
   final FancyConsoleTextColors errorColor;
 
-  const FancyDioInspectorConsoleOptions({
+  const HttpDioInspectorConsoleOptions({
     this.verbose = false,
     this.colorize = true,
     this.requestName = FancyStrings.requestUpperCased,
