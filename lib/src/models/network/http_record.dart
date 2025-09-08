@@ -78,9 +78,84 @@ class HttpRecord {
   }
 
   String get contentType {
-    // try{
-    //   return response?.headers['content-type']![0].split(":")[0];
-    // }
     return response?.headers['content-type']?[0].split(';')[0] ?? '';
+  }
+
+  String toHttpRequestLog() {
+    final buffer = StringBuffer();
+
+    // Request
+    buffer.writeln('## Request');
+    buffer.writeln();
+    buffer.writeln('- URL: ${requestOptions.uri}');
+    buffer.writeln('- Method: ${requestOptions.method}');
+    if (requestOptions.headers.isNotEmpty) {
+      buffer.writeln('- Headers:');
+      requestOptions.headers.forEach((key, value) {
+        buffer.writeln('  - $key: $value');
+      });
+    }
+    if (requestOptions.data != null) {
+      buffer.writeln('- Body:');
+      buffer.writeln('  ```json');
+      if (requestOptions.data is Map) {
+        buffer.writeln(
+          (requestOptions.data as Map<String, dynamic>).toPrettyJson(),
+        );
+      } else {
+        buffer.writeln(requestOptions.data.toString());
+      }
+      buffer.writeln('  ```');
+    }
+    buffer.writeln();
+
+    // Response
+    if (response != null) {
+      buffer.writeln('## Response');
+      buffer.writeln();
+      buffer.writeln('- Status Code: ${response!.statusCode}');
+      if (response!.headers.map.isNotEmpty) {
+        buffer.writeln('- Headers:');
+        response!.headers.forEach((key, values) {
+          buffer.writeln('  - $key: ${values.join(', ')}');
+        });
+      }
+      if (response!.data != null) {
+        buffer.writeln('- Body:');
+        buffer.writeln('  ```json');
+        buffer.writeln(prettyJsonResponseBody);
+        buffer.writeln('  ```');
+      }
+      buffer.writeln();
+    }
+
+    // Error
+    if (dioException != null) {
+      buffer.writeln('## Error');
+      buffer.writeln();
+      buffer.writeln('- Message: ${dioException!.message}');
+      if (dioException!.response != null) {
+        buffer.writeln('- Status Code: ${dioException!.response!.statusCode}');
+        if (dioException!.response!.headers.map.isNotEmpty) {
+          buffer.writeln('- Headers:');
+          dioException!.response!.headers.forEach((key, values) {
+            buffer.writeln('  - $key: ${values.join(', ')}');
+          });
+        }
+        if (dioException!.response!.data != null) {
+          buffer.writeln('- Body:');
+          buffer.writeln('  ```json');
+          buffer.writeln(prettyJsonResponseBody);
+          buffer.writeln('  ```');
+        }
+      }
+      buffer.writeln('- Stack Trace:');
+      buffer.writeln('  ```');
+      buffer.writeln(dioException!.stackTrace.toString());
+      buffer.writeln('  ```');
+      buffer.writeln();
+    }
+
+    return buffer.toString();
   }
 }

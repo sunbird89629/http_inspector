@@ -42,7 +42,17 @@ class _MyAppState extends State<MyApp> {
         builder: (context) => HttpScopeView(
           leading: CloseButton(onPressed: Navigator.of(context).pop),
           viewConfig: HttpScopeViewConfig(
-            itemBuilder: (context, record) => Text(record.toString()),
+            itemBuilder: (context, record) => Column(
+              children: [
+                Text(record.url),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    debugPrint(record.toHttpRequestLog());
+                  },
+                  label: const Text("Test toHttpRequestLog"),
+                )
+              ],
+            ),
           ),
         ),
       ),
