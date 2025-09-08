@@ -81,6 +81,38 @@ class HttpRecord {
     return response?.headers['content-type']?[0].split(';')[0] ?? '';
   }
 
+  String toCurlCommand() {
+    final StringBuffer curl = StringBuffer('curl');
+
+    // Method
+    curl.write(' -X ${requestOptions.method}');
+
+    // Headers
+    requestOptions.headers.forEach((key, value) {
+      // Escape single quotes in the header value
+      final escapedValue = value.toString().replaceAll("'", "\\'\\");
+      curl.write(' -H \'${key}: ${escapedValue}\'');
+    });
+
+    // Body
+    if (requestOptions.data != null) {
+      String body;
+      if (requestOptions.data is Map) {
+        body = (requestOptions.data as Map<String, dynamic>).toPrettyJson();
+      } else {
+        body = requestOptions.data.toString();
+      }
+      // Escape single quotes in the body
+      body = body.replaceAll("'", "\\'\\");
+      curl.write(' -d \'${body}\'');
+    }
+
+    // URL
+    curl.write(' \'${requestOptions.uri.toString()}\'');
+
+    return curl.toString();
+  }
+
   String toHttpRequestLog() {
     final buffer = StringBuffer();
 
@@ -107,6 +139,13 @@ class HttpRecord {
       }
       buffer.writeln('  ```');
     }
+    buffer.writeln();
+
+    // Curl Command
+    buffer.writeln('## Curl Command');
+    buffer.writeln('```bash');
+    buffer.writeln(toCurlCommand());
+    buffer.writeln('```');
     buffer.writeln();
 
     // Response
