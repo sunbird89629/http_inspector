@@ -56,7 +56,11 @@ class HttpRecord {
     }
   }
 
-  String get prettyJsonResponseBody {
+  String get requestBodyPrettyJson {
+    return requestOptions.createRequestBody();
+  }
+
+  String get responseBodyPrettyJson {
     if (response?.data != null) {
       return (response!.data as Map<String, dynamic>).toPrettyJson();
     } else if (dioException?.response?.data != null) {
@@ -161,7 +165,7 @@ class HttpRecord {
       if (response!.data != null) {
         buffer.writeln('- Body:');
         buffer.writeln('  ```json');
-        buffer.writeln(prettyJsonResponseBody);
+        buffer.writeln(responseBodyPrettyJson);
         buffer.writeln('  ```');
       }
       buffer.writeln();
@@ -183,7 +187,7 @@ class HttpRecord {
         if (dioException!.response!.data != null) {
           buffer.writeln('- Body:');
           buffer.writeln('  ```json');
-          buffer.writeln(prettyJsonResponseBody);
+          buffer.writeln(responseBodyPrettyJson);
           buffer.writeln('  ```');
         }
       }

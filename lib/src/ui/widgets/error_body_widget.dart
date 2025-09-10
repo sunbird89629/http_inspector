@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/ui/widgets/title_content_pannel_widget.dart';
-import 'package:flutter/material.dart';
 
 class ErrorBodyWidget extends StatelessWidget {
   const ErrorBodyWidget({
@@ -13,7 +13,7 @@ class ErrorBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TitleContentPannelWidget(
       title: 'Response Body',
-      content: model.prettyJsonResponseBody,
+      content: model.responseBodyPrettyJson,
     );
   }
 }
