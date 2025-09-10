@@ -1,16 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import for Clipboard
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/theme/fancy_colors.dart';
+import 'package:http_inspector/src/ui/views/edit_request_page.dart';
 import 'package:http_inspector/src/ui/widgets/curl_widget.dart';
 import 'package:http_inspector/src/ui/widgets/error_body_widget.dart';
 import 'package:http_inspector/src/ui/widgets/overview_widget.dart';
-import 'package:http_inspector/src/ui/widgets/request_header_widget.dart';
 import 'package:http_inspector/src/ui/widgets/request_body_widget.dart';
+import 'package:http_inspector/src/ui/widgets/request_header_widget.dart';
 import 'package:http_inspector/src/ui/widgets/response_body_widget.dart';
 import 'package:http_inspector/src/ui/widgets/response_header_widget.dart';
-import 'package:http_inspector/src/ui/views/edit_request_page.dart';
 import 'package:http_inspector/src/ui/widgets/title_bar_action_widget.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
-import 'package:flutter/material.dart';
 
 class HttpDetailPage extends StatelessWidget {
   const HttpDetailPage({
@@ -39,6 +40,18 @@ class HttpDetailPage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => EditRequestPage(record: model),
+                  ),
+                );
+              },
+            ),
+            TitleBarActionWidget(
+              iconData: Icons.copy, // Copy icon
+              onPressed: () {
+                final contentToCopy = model.toHttpRequestLog();
+                Clipboard.setData(ClipboardData(text: contentToCopy));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('HTTP log copied to clipboard!'),
                   ),
                 );
               },

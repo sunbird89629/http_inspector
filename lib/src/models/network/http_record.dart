@@ -82,7 +82,7 @@ class HttpRecord {
   }
 
   String toCurlCommand() {
-    final StringBuffer curl = StringBuffer('curl');
+    final curl = StringBuffer('curl');
 
     // Method
     curl.write(' -X ${requestOptions.method}');
@@ -90,8 +90,8 @@ class HttpRecord {
     // Headers
     requestOptions.headers.forEach((key, value) {
       // Escape single quotes in the header value
-      final escapedValue = value.toString().replaceAll("'", "\\'\\");
-      curl.write(' -H \'${key}: ${escapedValue}\'');
+      final escapedValue = value.toString().replaceAll("'", r"\'\");
+      curl.write(" -H '$key: $escapedValue'");
     });
 
     // Body
@@ -103,19 +103,18 @@ class HttpRecord {
         body = requestOptions.data.toString();
       }
       // Escape single quotes in the body
-      body = body.replaceAll("'", "\\'\\");
-      curl.write(' -d \'${body}\'');
+      body = body.replaceAll("'", r"\'\");
+      curl.write(" -d '$body'");
     }
 
     // URL
-    curl.write(' \'${requestOptions.uri.toString()}\'');
+    curl.write(" '${requestOptions.uri}'");
 
     return curl.toString();
   }
 
   String toHttpRequestLog() {
     final buffer = StringBuffer();
-
     // Request
     buffer.writeln('## Request');
     buffer.writeln();

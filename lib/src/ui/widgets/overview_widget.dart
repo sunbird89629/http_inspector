@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/theme/theme.dart';
 import 'package:http_inspector/src/ui/widgets/pannel_widget.dart';
-import 'package:flutter/material.dart';
 
 class OverviewWidget extends StatelessWidget {
   const OverviewWidget({
@@ -82,7 +82,7 @@ class OverviewWidget extends StatelessWidget {
         const SizedBox(height: 8),
         ...queryParameters.entries.map((e) {
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -100,7 +100,7 @@ class OverviewWidget extends StatelessWidget {
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

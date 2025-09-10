@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http_inspector/http_inspector.dart';
 
 void main() {
-  /// Initialize your `Dio` client.
   DioClient.instance.init();
 
   runApp(const MyApp());
@@ -41,19 +40,19 @@ class _MyAppState extends State<MyApp> {
       MaterialPageRoute(
         builder: (context) => HttpScopeView(
           leading: CloseButton(onPressed: Navigator.of(context).pop),
-          viewConfig: HttpScopeViewConfig(
-            itemBuilder: (context, record) => Column(
-              children: [
-                Text(record.url),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    debugPrint(record.toHttpRequestLog());
-                  },
-                  label: const Text("Test toHttpRequestLog"),
-                )
-              ],
-            ),
-          ),
+          viewConfig: const HttpScopeViewConfig(
+              // itemBuilder: (context, record) => Column(
+              //   children: [
+              //     Text(record.url),
+              //     ElevatedButton.icon(
+              //       onPressed: () {
+              //         debugPrint(record.toHttpRequestLog());
+              //       },
+              //       label: const Text("Test toHttpRequestLog"),
+              //     )
+              //   ],
+              // ),
+              ),
         ),
       ),
     );
@@ -74,10 +73,10 @@ class _MyAppState extends State<MyApp> {
                 const SizedBox(height: 16),
                 const SizedBox(height: 8),
                 ElevatedButton(
+                  child: const Text('出售中的宠物列表'),
                   onPressed: () {
-                    DioClient.instance.mockSuccessHttpRequest();
+                    DioClient.instance.getPetsOnSold();
                   },
-                  child: const Text('Mock success Http'),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -120,9 +119,12 @@ class DioClient {
   late final Dio _dio;
 
   void init() {
-    _dio = Dio(BaseOptions(baseUrl: 'https://reqres.in/api'));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://m1.apifoxmock.com/m1/2728662-2829179-default',
+      ),
+    );
 
-    /// Add the `FancyDioInterceptor` to the `Dio` client.
     _dio.interceptors.add(
       HttpInspectorInterceptor(
         options: const HttpDioInspectorOptions(
@@ -141,6 +143,24 @@ class DioClient {
     try {
       final response = await _dio.post('/login', data: request.toJson());
       return LoginResponse.fromJson(response.data);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //出售中的宠物列表
+  Future<dynamic> getPetsOnSold() async {
+    const url = "/pet/findByStatus";
+    try {
+      final queryParams = {
+        'params1': 'param1_value',
+        'params2': 'param2_value',
+        'params3': 'param3_value',
+      };
+      return await _dio.get(
+        url,
+        queryParameters: queryParams,
+      );
     } catch (e) {
       return null;
     }
