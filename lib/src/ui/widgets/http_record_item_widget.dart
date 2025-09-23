@@ -61,6 +61,12 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
                     color: FancyColors.pink,
                   ),
             ),
+            Text(
+              'ms',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: FancyColors.pink,
+                  ),
+            ),
           ],
         ),
         subtitle: Text(

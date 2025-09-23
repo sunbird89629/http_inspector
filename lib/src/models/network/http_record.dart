@@ -40,9 +40,7 @@ class HttpRecord {
 
     final duration = theEndTime.difference(theStartTime);
 
-    final ms = duration.inMilliseconds +
-        duration.inMicroseconds.remainder(1000) / 1000;
-    return '${ms.toStringAsFixed(1)} ms';
+    return '${duration.inMilliseconds}';
   }
 
   Color get statusColor {
