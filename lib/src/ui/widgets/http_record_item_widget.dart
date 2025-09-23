@@ -54,19 +54,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
                   ),
             ),
             const SizedBox(width: 20),
-            Text(
-              widget.record.duration,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: FancyColors.pink,
-                  ),
-            ),
-            Text(
-              'ms',
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: FancyColors.pink,
-                  ),
-            ),
+            buildDurationWidget(context),
           ],
         ),
         subtitle: Text(
@@ -106,6 +94,28 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
           );
         },
       ),
+    );
+  }
+
+  Row buildDurationWidget(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          widget.record.duration,
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: FancyColors.pink,
+              ),
+        ),
+        Text(
+          'ms',
+          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                color: FancyColors.pink,
+              ),
+        ),
+      ],
     );
   }
 }
