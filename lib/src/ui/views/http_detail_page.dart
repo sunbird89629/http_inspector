@@ -56,10 +56,10 @@ class HttpDetailPage extends StatelessWidget {
                 );
               },
             ),
-            TitleBarActionWidget(
-              iconData: Icons.bookmark_add_rounded,
-              onPressed: () {},
-            ),
+            // TitleBarActionWidget(
+            //   iconData: Icons.bookmark_add_rounded,
+            //   onPressed: () {},
+            // ),
           ],
         ),
         body: SingleChildScrollView(
