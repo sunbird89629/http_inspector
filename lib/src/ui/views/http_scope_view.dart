@@ -112,7 +112,9 @@ class _HttpScopeViewState extends State<HttpScopeView> {
                 );
               },
               onLongPress: () {
-                FancyDioLogger.instance.records.clear();
+                FancyDioLogger.instance.records.removeWhere(
+                  (record) => !record.isFavorite,
+                );
                 mainDataProvider.httpRecords = FancyDioLogger.instance.records;
               },
             ),
