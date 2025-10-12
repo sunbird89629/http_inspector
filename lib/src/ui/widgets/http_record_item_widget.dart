@@ -4,6 +4,7 @@ import 'package:http_inspector/src/theme/theme.dart';
 import 'package:http_inspector/src/ui/views/http_detail_page.dart';
 import 'package:http_inspector/src/ui/views/http_scope_view.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
+import 'package:http_inspector/src/utils/extensions/scope_extensions.dart';
 
 class HttpRecordItemWidget extends StatefulWidget {
   const HttpRecordItemWidget({
@@ -68,18 +69,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: Icon(
-                widget.record.isFavorite ? Icons.star : Icons.star_border,
-                color: widget.record.isFavorite ? Colors.amber : null,
-              ),
-              onPressed: () {
-                setState(() {
-                  widget.record.isFavorite = !widget.record.isFavorite;
-                });
-                mainDataProvider.notifyListeners();
-              },
-            ),
+            _buildStarWidget(),
             const Icon(Icons.keyboard_arrow_right),
           ],
         ),
@@ -94,6 +84,31 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
           );
         },
       ),
+    );
+  }
+
+  IconButton _buildStarWidget() {
+    final iconStar = widget.record.run((it) {
+      if (it.isAlwaysStar) {
+        return Icons.stars;
+      } else if (it.isFavorite) {
+        return Icons.star;
+      } else {
+        return Icons.star_border;
+      }
+    });
+
+    return IconButton(
+      icon: Icon(
+        iconStar,
+        color: widget.record.isFavorite ? Colors.amber : null,
+      ),
+      onPressed: () {
+        setState(() {
+          widget.record.isFavorite = !widget.record.isFavorite;
+        });
+        mainDataProvider.notifyListeners();
+      },
     );
   }
 

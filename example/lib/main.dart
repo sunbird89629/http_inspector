@@ -40,19 +40,26 @@ class _MyAppState extends State<MyApp> {
       MaterialPageRoute(
         builder: (context) => HttpScopeView(
           leading: CloseButton(onPressed: Navigator.of(context).pop),
-          viewConfig: const HttpScopeViewConfig(
-              // itemBuilder: (context, record) => Column(
-              //   children: [
-              //     Text(record.url),
-              //     ElevatedButton.icon(
-              //       onPressed: () {
-              //         debugPrint(record.toHttpRequestLog());
-              //       },
-              //       label: const Text("Test toHttpRequestLog"),
-              //     )
-              //   ],
-              // ),
-              ),
+          viewConfig: HttpScopeViewConfig(
+            alwaysStar: (record) {
+              if (record.url.contains('login')) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            // itemBuilder: (context, record) => Column(
+            //   children: [
+            //     Text(record.url),
+            //     ElevatedButton.icon(
+            //       onPressed: () {
+            //         debugPrint(record.toHttpRequestLog());
+            //       },
+            //       label: const Text("Test toHttpRequestLog"),
+            //     )
+            //   ],
+            // ),
+          ),
         ),
       ),
     );
