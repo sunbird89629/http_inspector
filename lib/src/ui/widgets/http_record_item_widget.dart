@@ -101,7 +101,9 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
     return IconButton(
       icon: Icon(
         iconStar,
-        color: widget.record.isFavorite ? Colors.amber : null,
+        color: widget.record.isFavorite || widget.record.isAlwaysStar
+            ? Colors.amber
+            : null,
       ),
       onPressed: () {
         setState(() {
