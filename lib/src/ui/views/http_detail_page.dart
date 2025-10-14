@@ -12,6 +12,7 @@ import 'package:http_inspector/src/ui/widgets/response_body_widget.dart';
 import 'package:http_inspector/src/ui/widgets/response_header_widget.dart';
 import 'package:http_inspector/src/ui/widgets/title_bar_action_widget.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
+import 'package:http_inspector/src/utils/feishu_send_utils.dart';
 
 class HttpDetailPage extends StatelessWidget {
   const HttpDetailPage({
@@ -54,6 +55,14 @@ class HttpDetailPage extends StatelessWidget {
                     content: Text('HTTP log copied to clipboard!'),
                   ),
                 );
+              },
+            ),
+            TitleBarActionWidget(
+              iconData: Icons.smart_toy,
+              onPressed: () {
+                final contentToSend = model.toHttpRequestLog();
+                // Clipboard.setData(ClipboardData(text: contentToCopy));
+                FeishuSend.sendMessage(contentToSend);
               },
             ),
             // TitleBarActionWidget(
