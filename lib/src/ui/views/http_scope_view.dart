@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http_inspector/http_inspector.dart';
-import 'package:http_inspector/src/loggers/fancy_dio_logger.dart';
+import 'package:http_inspector/src/loggers/http_dio_logger.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/providers/main_data_provider.dart';
 import 'package:http_inspector/src/ui/widgets/title_bar_action_widget.dart';
@@ -9,7 +9,7 @@ import 'package:http_inspector/src/utils/extensions/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final mainDataProvider = MainDataProvider(
-  httpRecords: FancyDioLogger.instance.records,
+  httpRecords: HttpDioLogger.instance.records,
 );
 
 class HttpScopeView extends StatefulWidget {
@@ -105,10 +105,10 @@ class _HttpScopeViewState extends State<HttpScopeView> {
             );
           },
           onLongPress: () {
-            FancyDioLogger.instance.records.removeWhere(
+            HttpDioLogger.instance.records.removeWhere(
               (record) => !record.isFavorite && !record.isAlwaysStar,
             );
-            mainDataProvider.httpRecords = FancyDioLogger.instance.records;
+            mainDataProvider.httpRecords = HttpDioLogger.instance.records;
           },
         ),
         TitleBarActionWidget(

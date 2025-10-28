@@ -7,9 +7,9 @@ import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/utils/enums/enums.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 
-class FancyDioLogger {
-  FancyDioLogger._();
-  static final FancyDioLogger instance = FancyDioLogger._();
+class HttpDioLogger {
+  HttpDioLogger._();
+  static final HttpDioLogger instance = HttpDioLogger._();
 
   HttpDioInspectorOptions options = const HttpDioInspectorOptions();
   HttpDioInspectorConsoleOptions get consoleOptions => options.consoleOptions;

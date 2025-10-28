@@ -1,1 +1,1 @@
-export 'fancy_dio_logger.dart';
+export 'http_dio_logger.dart';

@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:http_inspector/src/loggers/fancy_dio_logger.dart';
+import 'package:http_inspector/src/loggers/http_dio_logger.dart';
 import 'package:http_inspector/src/models/models.dart';
 import 'package:http_inspector/src/typedefs/typedefs.dart';
 
 class HttpInspectorInterceptor extends Interceptor {
-  FancyDioLogger get logger => FancyDioLogger.instance;
+  HttpDioLogger get logger => HttpDioLogger.instance;
 
   final HttpDioInspectorOptions options;
 

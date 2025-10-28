@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http_inspector/src/loggers/fancy_dio_logger.dart';
+import 'package:http_inspector/src/loggers/http_dio_logger.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 
 class EditRequestPage extends StatefulWidget {
@@ -24,12 +24,13 @@ class _EditRequestPageState extends State<EditRequestPage> {
   @override
   void initState() {
     super.initState();
-    _urlController =
-        TextEditingController(text: widget.record.requestOptions.uri.toString());
-    _bodyController =
-        TextEditingController(text: widget.record.requestOptions.data?.toString() ?? '');
+    _urlController = TextEditingController(
+        text: widget.record.requestOptions.uri.toString());
+    _bodyController = TextEditingController(
+        text: widget.record.requestOptions.data?.toString() ?? '');
     _method = widget.record.requestOptions.method;
-    _headers = widget.record.requestOptions.headers.map((k, v) => MapEntry(k, v.toString()));
+    _headers = widget.record.requestOptions.headers
+        .map((k, v) => MapEntry(k, v.toString()));
   }
 
   @override
@@ -105,7 +106,8 @@ class _EditRequestPageState extends State<EditRequestPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Headers', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        const Text('Headers',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ..._headers.entries.map((entry) {
           return Row(
             children: [
@@ -177,11 +179,11 @@ class _EditRequestPageState extends State<EditRequestPage> {
           headers: _headers,
         ),
       );
-      FancyDioLogger.instance.log(response.requestOptions);
-      FancyDioLogger.instance.log(response);
+      HttpDioLogger.instance.log(response.requestOptions);
+      HttpDioLogger.instance.log(response);
     } on DioException catch (e) {
-      FancyDioLogger.instance.log(e.requestOptions);
-      FancyDioLogger.instance.log(e);
+      HttpDioLogger.instance.log(e.requestOptions);
+      HttpDioLogger.instance.log(e);
     } finally {
       if (mounted) {
         Navigator.of(context).pop();
