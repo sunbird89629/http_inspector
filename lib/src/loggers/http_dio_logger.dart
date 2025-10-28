@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http_inspector/src/models/models.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
+import 'package:http_inspector/src/providers/main_provider.dart';
 import 'package:http_inspector/src/utils/enums/enums.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 
@@ -14,9 +15,6 @@ class HttpDioLogger {
   HttpDioInspectorOptions options = const HttpDioInspectorOptions();
   HttpDioInspectorConsoleOptions get consoleOptions => options.consoleOptions;
 
-  final List<HttpRecord> _records = [];
-
-  /// [T] must be either [RequestOptions], [Response] or [DioException].
   void log<T>(T data) {
     final now = DateTime.now();
 
@@ -34,7 +32,11 @@ class HttpDioLogger {
       if (consoleOptions.verbose) {
         consoleLog(model: requestModel);
       }
-      _records.insert(0, HttpRecord(requestOptions: data, startTime: now));
+
+      MainProvider().insertHttpRecord(
+        HttpRecord(requestOptions: data, startTime: now),
+      );
+      // _records.insert(0, HttpRecord(requestOptions: data, startTime: now));
     } else if (data is Response) {
       final responseModel = NetworkResponseModel(
         url: data.createUrlComponent(),
@@ -47,15 +49,17 @@ class HttpDioLogger {
         time: now,
         elapsedDuration: data.calculateElapsedDuration(),
       );
-
       if (consoleOptions.verbose) {
         consoleLog(model: responseModel);
       }
-      final record = _records.firstWhere(
-        (element) => element.requestOptions == data.requestOptions,
+      MainProvider().updateHttpRecordByRequestOptions(
+        data.requestOptions,
+        (record) {
+          record
+            ..response = data
+            ..endTime = now;
+        },
       );
-      record.response = data;
-      record.endTime = now;
     } else if (data is DioException) {
       final errorModel = NetworkErrorModel(
         url: data.createUrlComponent(),
@@ -72,11 +76,14 @@ class HttpDioLogger {
       if (consoleOptions.verbose) {
         consoleLog(model: errorModel);
       }
-      final record = _records.firstWhere(
-        (element) => element.requestOptions == data.requestOptions,
+      MainProvider().updateHttpRecordByRequestOptions(
+        data.requestOptions,
+        (record) {
+          record
+            ..dioException = data
+            ..endTime = now;
+        },
       );
-      record.dioException = data;
-      record.endTime = now;
     } else {
       throw Exception('Invalid type!');
     }
@@ -128,6 +135,5 @@ class HttpDioLogger {
       );
     }
   }
-
-  List<HttpRecord> get records => _records;
+  // List<HttpRecord> get records => _records;
 }

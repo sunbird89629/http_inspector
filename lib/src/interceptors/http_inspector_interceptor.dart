@@ -27,7 +27,6 @@ class HttpInspectorInterceptor extends Interceptor {
       logger.log(options);
       onRequestCreated?.call(options);
     }
-
     handler.next(options);
   }
 

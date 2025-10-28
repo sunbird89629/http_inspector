@@ -1,16 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http_inspector/http_inspector.dart';
-import 'package:http_inspector/src/loggers/http_dio_logger.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
-import 'package:http_inspector/src/providers/main_data_provider.dart';
+import 'package:http_inspector/src/providers/main_provider.dart';
 import 'package:http_inspector/src/ui/widgets/title_bar_action_widget.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-final mainDataProvider = MainDataProvider(
-  httpRecords: HttpDioLogger.instance.records,
-);
 
 class HttpScopeView extends StatefulWidget {
   final Widget? leading;
@@ -39,7 +34,7 @@ class _HttpScopeViewState extends State<HttpScopeView> {
   @override
   void initState() {
     super.initState();
-    mainDataProvider.viewConfig = widget.viewConfig;
+    MainProvider().viewConfig = widget.viewConfig;
     _searchController.addListener(() {
       setState(() {});
     });
@@ -76,10 +71,10 @@ class _HttpScopeViewState extends State<HttpScopeView> {
               ),
             )
           : ListenableBuilder(
-              listenable: mainDataProvider,
+              listenable: MainProvider(),
               builder: (context, child) {
                 return Text(
-                  'HttpRecords( ${mainDataProvider.httpRecords.length} )',
+                  'HttpRecords( ${MainProvider().httpRecords.length} )',
                 );
               },
             ),
@@ -105,10 +100,11 @@ class _HttpScopeViewState extends State<HttpScopeView> {
             );
           },
           onLongPress: () {
-            HttpDioLogger.instance.records.removeWhere(
-              (record) => !record.isFavorite && !record.isAlwaysStar,
+            MainProvider().updateHttpRecords(
+              (records) => records.removeWhere(
+                (record) => !record.isFavorite && !record.isAlwaysStar,
+              ),
             );
-            mainDataProvider.httpRecords = HttpDioLogger.instance.records;
           },
         ),
         TitleBarActionWidget(
@@ -127,9 +123,9 @@ class _HttpScopeViewState extends State<HttpScopeView> {
   }
 
   List<HttpRecord> get recordsShouldToShow {
-    final httpRecords = mainDataProvider.httpRecords.where(
+    final httpRecords = MainProvider().httpRecords.where(
       (record) {
-        final filter = mainDataProvider.viewConfig.recordFilter.call(record);
+        final filter = MainProvider().viewConfig.recordFilter.call(record);
         final favorite =
             !_showOnlyFavorites || record.isFavorite || record.isAlwaysStar;
         // final search = _searchController.text.isEmpty ||
@@ -150,7 +146,7 @@ class _HttpScopeViewState extends State<HttpScopeView> {
 
   Widget _buildBody() {
     return ListenableBuilder(
-      listenable: mainDataProvider,
+      listenable: MainProvider(),
       builder: (context, child) {
         final groupedRecords = groupBy<HttpRecord, String>(
           recordsShouldToShow,

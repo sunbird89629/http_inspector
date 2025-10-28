@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
-import 'package:http_inspector/http_inspector.dart';
+import 'package:http_inspector/src/providers/main_provider.dart';
 import 'package:http_inspector/src/theme/theme.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 
@@ -44,7 +44,7 @@ class HttpRecord {
     return '${duration.inMilliseconds}';
   }
 
-  bool get isAlwaysStar => mainDataProvider.viewConfig.alwaysStar(this);
+  bool get isAlwaysStar => MainProvider().viewConfig.alwaysStar(this);
 
   Color get statusColor {
     switch (statusCode) {

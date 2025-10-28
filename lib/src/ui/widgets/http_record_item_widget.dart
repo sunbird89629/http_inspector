@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
+import 'package:http_inspector/src/providers/main_provider.dart';
 import 'package:http_inspector/src/theme/theme.dart';
 import 'package:http_inspector/src/ui/views/http_detail_page.dart';
-import 'package:http_inspector/src/ui/views/http_scope_view.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 import 'package:http_inspector/src/utils/extensions/scope_extensions.dart';
 
@@ -109,7 +109,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
         setState(() {
           widget.record.isFavorite = !widget.record.isFavorite;
         });
-        mainDataProvider.notifyListeners();
+        MainProvider().notifyListeners();
       },
     );
   }
