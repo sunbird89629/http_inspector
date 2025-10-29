@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/ui/widgets/title_content_pannel_widget.dart';
-import 'package:flutter/material.dart';
 
 class ResponseHeaderWidget extends StatelessWidget {
   const ResponseHeaderWidget({
@@ -11,7 +11,8 @@ class ResponseHeaderWidget extends StatelessWidget {
   final HttpRecord model;
   @override
   Widget build(BuildContext context) {
-    final headers = model.response?.headers.map ?? model.dioException?.response?.headers.map;
+    final headers =
+        model.response?.headers.map ?? model.exception?.response?.headers.map;
 
     if (headers == null) {
       return const SizedBox.shrink();

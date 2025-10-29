@@ -95,7 +95,7 @@ class HttpDetailPage extends StatelessWidget {
   Widget _buildResultWidget() {
     if (model.response != null) {
       return ResponseBodyWidget(model: model);
-    } else if (model.dioException != null) {
+    } else if (model.exception != null) {
       return ErrorBodyWidget(model: model);
     } else {
       return const SizedBox.shrink();

@@ -69,7 +69,10 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildStarWidget(),
+            if (widget.record.isRequesting)
+              _buildLoadingIndicator()
+            else
+              _buildStarWidget(),
             const Icon(Icons.keyboard_arrow_right),
           ],
         ),
@@ -84,6 +87,16 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Container(
+      constraints: BoxConstraints.tight(
+        const Size(20, 20),
+      ),
+      margin: const EdgeInsets.only(right: 12),
+      child: const CircularProgressIndicator.adaptive(),
     );
   }
 
@@ -106,10 +119,9 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
             : null,
       ),
       onPressed: () {
-        setState(() {
+        MainProvider().updateHttpRecord(() {
           widget.record.isFavorite = !widget.record.isFavorite;
         });
-        MainProvider().notifyListeners();
       },
     );
   }

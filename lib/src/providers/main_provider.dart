@@ -31,6 +31,11 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateHttpRecord(void Function() updater) {
+    updater.call();
+    notifyListeners();
+  }
+
   void updateHttpRecords(void Function(List<HttpRecord> records) updater) {
     updater.call(_httpRecords);
     notifyListeners();

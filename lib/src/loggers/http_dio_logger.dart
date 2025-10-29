@@ -80,7 +80,7 @@ class HttpDioLogger {
         data.requestOptions,
         (record) {
           record
-            ..dioException = data
+            ..exception = data
             ..endTime = now;
         },
       );

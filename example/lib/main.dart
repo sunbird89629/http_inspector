@@ -75,6 +75,7 @@ class _MyAppState extends State<MyApp> {
           body: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('Http Inspector'),
                 const SizedBox(height: 16),
@@ -83,6 +84,12 @@ class _MyAppState extends State<MyApp> {
                   child: const Text('出售中的宠物列表'),
                   onPressed: () {
                     DioClient.instance.getPetsOnSold();
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('long delayed request'),
+                  onPressed: () {
+                    DioClient.instance.getLongDelayedRequest();
                   },
                 ),
                 ElevatedButton(
@@ -167,6 +174,25 @@ class DioClient {
       return await _dio.get(
         url,
         queryParameters: queryParams,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //出售中的宠物列表
+  Future<dynamic> getLongDelayedRequest() async {
+    // https://m1.apifoxmock.com/m1/2728662-2829179-default/pet/1
+    const url = "/pet/1";
+    try {
+      // final queryParams = {
+      //   'params1': 'param1_value',
+      //   'params2': 'param2_value',
+      //   'params3': 'param3_value',
+      // };
+      return await _dio.get(
+        url,
+        // queryParameters: queryParams,
       );
     } catch (e) {
       return null;

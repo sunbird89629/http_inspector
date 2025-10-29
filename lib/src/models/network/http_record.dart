@@ -9,7 +9,7 @@ class HttpRecord {
   HttpRecord({
     required this.requestOptions,
     this.response,
-    this.dioException,
+    this.exception,
     this.startTime,
   });
 
@@ -19,13 +19,13 @@ class HttpRecord {
 
   final RequestOptions requestOptions;
   Response<dynamic>? response;
-  DioException? dioException;
+  DioException? exception;
 
   int? get statusCode {
     if (response != null) {
       return response?.statusCode;
-    } else if (dioException != null) {
-      return dioException?.response?.statusCode;
+    } else if (exception != null) {
+      return exception?.response?.statusCode;
     } else {
       return null;
     }
@@ -43,6 +43,8 @@ class HttpRecord {
 
     return '${duration.inMilliseconds}';
   }
+
+  bool get isRequesting => response == null && exception == null;
 
   bool get isAlwaysStar => MainProvider().viewConfig.alwaysStar(this);
 
@@ -64,9 +66,8 @@ class HttpRecord {
   String get responseBodyPrettyJson {
     if (response?.data != null) {
       return (response!.data as Map<String, dynamic>).toPrettyJson();
-    } else if (dioException?.response?.data != null) {
-      return (dioException!.response!.data as Map<String, dynamic>)
-          .toPrettyJson();
+    } else if (exception?.response?.data != null) {
+      return (exception!.response!.data as Map<String, dynamic>).toPrettyJson();
     } else {
       return '';
     }
@@ -75,8 +76,8 @@ class HttpRecord {
   String get responseHeadersString {
     if (response != null) {
       return response!.headers.toString();
-    } else if (dioException?.response != null) {
-      return dioException!.response!.headers.toString();
+    } else if (exception?.response != null) {
+      return exception!.response!.headers.toString();
     } else {
       return '';
     }
@@ -173,19 +174,19 @@ class HttpRecord {
     }
 
     // Error
-    if (dioException != null) {
+    if (exception != null) {
       buffer.writeln('## Error');
       buffer.writeln();
-      buffer.writeln('- Message: ${dioException!.message}');
-      if (dioException!.response != null) {
-        buffer.writeln('- Status Code: ${dioException!.response!.statusCode}');
-        if (dioException!.response!.headers.map.isNotEmpty) {
+      buffer.writeln('- Message: ${exception!.message}');
+      if (exception!.response != null) {
+        buffer.writeln('- Status Code: ${exception!.response!.statusCode}');
+        if (exception!.response!.headers.map.isNotEmpty) {
           buffer.writeln('- Headers:');
-          dioException!.response!.headers.forEach((key, values) {
+          exception!.response!.headers.forEach((key, values) {
             buffer.writeln('  - $key: ${values.join(', ')}');
           });
         }
-        if (dioException!.response!.data != null) {
+        if (exception!.response!.data != null) {
           buffer.writeln('- Body:');
           buffer.writeln('  ```json');
           buffer.writeln(responseBodyPrettyJson);
@@ -194,7 +195,7 @@ class HttpRecord {
       }
       buffer.writeln('- Stack Trace:');
       buffer.writeln('  ```');
-      buffer.writeln(dioException!.stackTrace.toString());
+      buffer.writeln(exception!.stackTrace.toString());
       buffer.writeln('  ```');
       buffer.writeln();
     }
