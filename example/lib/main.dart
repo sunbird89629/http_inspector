@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
                 ElevatedButton(
                   child: const Text('long delayed request'),
                   onPressed: () {
-                    DioClient.instance.getLongDelayedRequest();
+                    DioClient.instance.mockLongDelayedRequest();
                   },
                 ),
                 ElevatedButton(
@@ -181,19 +181,10 @@ class DioClient {
   }
 
   //出售中的宠物列表
-  Future<dynamic> getLongDelayedRequest() async {
-    // https://m1.apifoxmock.com/m1/2728662-2829179-default/pet/1
-    const url = "/pet/1";
+  Future<dynamic> mockLongDelayedRequest() async {
+    const url = "https://mock.aaaabb.cc/delay?time=27000";
     try {
-      // final queryParams = {
-      //   'params1': 'param1_value',
-      //   'params2': 'param2_value',
-      //   'params3': 'param3_value',
-      // };
-      return await _dio.get(
-        url,
-        // queryParameters: queryParams,
-      );
+      return await _dio.get(url);
     } catch (e) {
       return null;
     }
