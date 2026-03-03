@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 import 'package:http_inspector/src/ui/widgets/http_record_item_widget.dart';
 
+typedef SingleFilter = bool Function(HttpRecord item);
+
 class HttpScopeViewConfig {
   // default http record filter: always returns true
   static bool _defaultRecordFilter(HttpRecord record) => true;
@@ -16,9 +18,11 @@ class HttpScopeViewConfig {
   final bool Function(HttpRecord record) recordFilter;
   final bool Function(HttpRecord record) alwaysStar;
   final Widget Function(BuildContext context, HttpRecord record) itemBuilder;
+  final List<SingleFilter> customFilters;
   const HttpScopeViewConfig({
     this.recordFilter = _defaultRecordFilter,
     this.itemBuilder = _defaultHttpItemBuilder,
     this.alwaysStar = _defaultAlwaysStar,
+    this.customFilters = const [],
   });
 }
