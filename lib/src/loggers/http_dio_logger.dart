@@ -12,14 +12,14 @@ class HttpDioLogger {
   HttpDioLogger._();
   static final HttpDioLogger instance = HttpDioLogger._();
 
-  HttpDioInspectorOptions options = const HttpDioInspectorOptions();
-  HttpDioInspectorConsoleOptions get consoleOptions => options.consoleOptions;
+  HttpInspectorOptions options = const HttpInspectorOptions();
+  HttpInspectorConsoleOptions get consoleOptions => options.consoleOptions;
 
   void log<T>(T data) {
     final now = DateTime.now();
 
     if (data is RequestOptions) {
-      data.extra[FancyDioKey.requestTime.key] = now;
+      data.extra[HttpInspectorKey.requestTime.key] = now;
 
       final requestModel = NetworkRequestModel(
         url: data.createUrlComponent(),
@@ -93,8 +93,8 @@ class HttpDioLogger {
     required NetworkBaseModel model,
   }) {
     late final String name;
-    late FancyConsoleTextColors ansiiColor;
-    const resetAnsiColor = FancyConsoleTextColors.reset;
+    late HttpConsoleColors ansiiColor;
+    const resetAnsiColor = HttpConsoleColors.reset;
 
     switch (model.runtimeType) {
       case NetworkRequestModel:
@@ -115,7 +115,7 @@ class HttpDioLogger {
 
     /// If [consoleOptions.colorize] is [false], we should reset the color.
     if (!consoleOptions.colorize) {
-      ansiiColor = FancyConsoleTextColors.reset;
+      ansiiColor = HttpConsoleColors.reset;
     }
 
     final data = model.toClipboardText();

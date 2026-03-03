@@ -1,6 +1,6 @@
 import 'package:http_inspector/src/l10n/fancy_strings.dart';
 
-class FancyDioInspectorL10nOptions {
+class HttpInspectorL10nOptions {
   /// [appBarText] is used to change the text of the app bar. Defaults to
   /// `Network Logs`.
   final String appBarText;
@@ -55,7 +55,7 @@ class FancyDioInspectorL10nOptions {
   /// `ERROR BODY`.
   final String errorTitleText;
 
-  const FancyDioInspectorL10nOptions({
+  const HttpInspectorL10nOptions({
     this.appBarText = FancyStrings.appBarText,
     this.requestsText = FancyStrings.requests,
     this.responsesText = FancyStrings.responses,

@@ -16,13 +16,15 @@
 
 ## Coding Style & Naming Conventions
 - Follow the Very Good Analysis lint set (see `analysis_options.yaml`); use 2-space indentation, prefer `const`, and keep imports tidy.
-- Public APIs use `Http...` or `FancyDio...` prefixes; models and classes are PascalCase, files are `snake_case.dart`.
+- Public APIs use `HttpInspector*` prefix exclusively (e.g. `HttpInspectorOptions`, `HttpConsoleColors`); internal-only widgets/helpers keep `Fancy*` prefix. Models are PascalCase, files are `snake_case.dart`.
 - Widgets end with `...Widget` or `...Page`; helpers/providers use descriptive nouns. Favor barrel exports (e.g., `views.dart`, `interceptors.dart`) to keep imports concise.
 
 ## Testing Guidelines
 - Place tests in `_test.dart` files that mirror source paths (e.g., `test/ui/http_detail_page_test.dart` for `lib/src/ui/views/http_detail_page.dart`).
 - Use widget tests for UI components and unit tests for helpers, logging, and cURL generation logic.
+- The cURL extension (`request_extensions.dart`) omits `-X GET` for GET requests (curl defaults to GET); write test assertions accordingly.
 - Include assertions around filtering/search behavior and any new request mutation features. Run `flutter test` before opening a PR.
+- `flutter analyze` has ~52 pre-existing info-level issues from `very_good_analysis`; do not use `--fatal-infos` in CI — it will always fail on this repo.
 
 ## Commit & Pull Request Guidelines
 - Keep commit messages short, present-tense, and scoped; include an English summary even when adding bilingual notes (existing history mixes both).

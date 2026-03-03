@@ -32,7 +32,7 @@ extension DioErrorExtensions on DioException {
 
   Duration calculateElapsedDuration() {
     final requestTime =
-        requestOptions.extra[FancyDioKey.requestTime.key] as DateTime;
+        requestOptions.extra[HttpInspectorKey.requestTime.key] as DateTime;
     final now = DateTime.now();
 
     return now.difference(requestTime);

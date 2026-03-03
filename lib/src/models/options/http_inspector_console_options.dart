@@ -1,7 +1,7 @@
 import 'package:http_inspector/src/l10n/l10n.dart';
 import 'package:http_inspector/src/utils/enums/enums.dart';
 
-class HttpDioInspectorConsoleOptions {
+class HttpInspectorConsoleOptions {
   /// It controls whether to log to the console or not.
   final bool verbose;
 
@@ -20,24 +20,24 @@ class HttpDioInspectorConsoleOptions {
 
   /// It is the color of the request displayed in the console. [colorize] must
   /// be `true`. If [colorize] is `false`, this option is ignored.
-  final FancyConsoleTextColors requestColor;
+  final HttpConsoleColors requestColor;
 
   /// It is the color of the response displayed in the console. [colorize] must
   /// be `true`. If [colorize] is `false`, this option is ignored.
-  final FancyConsoleTextColors responseColor;
+  final HttpConsoleColors responseColor;
 
   /// It is the color of the error displayed in the console. [colorize] must
   /// be `true`. If [colorize] is `false`, this option is ignored.
-  final FancyConsoleTextColors errorColor;
+  final HttpConsoleColors errorColor;
 
-  const HttpDioInspectorConsoleOptions({
+  const HttpInspectorConsoleOptions({
     this.verbose = false,
     this.colorize = true,
     this.requestName = FancyStrings.requestUpperCased,
     this.responseName = FancyStrings.responseUpperCased,
     this.errorName = FancyStrings.errorUpperCased,
-    this.requestColor = FancyConsoleTextColors.yellow,
-    this.responseColor = FancyConsoleTextColors.green,
-    this.errorColor = FancyConsoleTextColors.red,
+    this.requestColor = HttpConsoleColors.yellow,
+    this.responseColor = HttpConsoleColors.green,
+    this.errorColor = HttpConsoleColors.red,
   });
 }

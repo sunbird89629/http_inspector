@@ -28,3 +28,11 @@ doc/api/
 
 # Flutter Version Management
 .fvm/flutter_sdk
+
+# Example app build artifacts
+example/build/
+example/.dart_tool/
+example/android/.gradle/
+example/ios/.symlinks/
+example/ios/Pods/
+example/*.log

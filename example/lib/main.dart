@@ -141,8 +141,8 @@ class DioClient {
 
     _dio.interceptors.add(
       HttpInspectorInterceptor(
-        options: const HttpDioInspectorOptions(
-          consoleOptions: HttpDioInspectorConsoleOptions(verbose: true),
+        options: const HttpInspectorOptions(
+          consoleOptions: HttpInspectorConsoleOptions(verbose: true),
         ),
       ),
     );

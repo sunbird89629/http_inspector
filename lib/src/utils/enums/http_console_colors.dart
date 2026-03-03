@@ -1,4 +1,4 @@
-enum FancyConsoleTextColors {
+enum HttpConsoleColors {
   reset('\x1B[0m'),
   black('\x1B[30m'),
   red('\x1B[31m'),
@@ -11,5 +11,5 @@ enum FancyConsoleTextColors {
 
   final String value;
 
-  const FancyConsoleTextColors(this.value);
+  const HttpConsoleColors(this.value);
 }

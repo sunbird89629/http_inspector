@@ -1,7 +1,7 @@
-import 'package:http_inspector/src/models/fancy_dio_inspector/fancy_dio_inspector.dart';
+import 'package:http_inspector/src/models/options/options.dart';
 
-/// This is used to configure the `FancyDioInspector` package.
-class HttpDioInspectorOptions {
+/// This is used to configure the `HttpInspector` package.
+class HttpInspectorOptions {
   /// It controls whether to log requests or not.
   final bool logRequests;
 
@@ -15,13 +15,13 @@ class HttpDioInspectorOptions {
   final int maxLogs;
 
   /// It controls the console logging options.
-  final HttpDioInspectorConsoleOptions consoleOptions;
+  final HttpInspectorConsoleOptions consoleOptions;
 
-  const HttpDioInspectorOptions({
+  const HttpInspectorOptions({
     this.logRequests = true,
     this.logResponses = true,
     this.logErrors = true,
     this.maxLogs = 50,
-    this.consoleOptions = const HttpDioInspectorConsoleOptions(),
+    this.consoleOptions = const HttpInspectorConsoleOptions(),
   });
 }

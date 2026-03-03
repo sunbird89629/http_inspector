@@ -6,14 +6,14 @@ import 'package:http_inspector/src/typedefs/typedefs.dart';
 class HttpInspectorInterceptor extends Interceptor {
   HttpDioLogger get logger => HttpDioLogger.instance;
 
-  final HttpDioInspectorOptions options;
+  final HttpInspectorOptions options;
 
   final OnRequestCreated? onRequestCreated;
   final OnResponseCreated? onResponseCreated;
   final OnErrorCreated? onErrorCreated;
 
   HttpInspectorInterceptor({
-    this.options = const HttpDioInspectorOptions(),
+    this.options = const HttpInspectorOptions(),
     this.onRequestCreated,
     this.onResponseCreated,
     this.onErrorCreated,
