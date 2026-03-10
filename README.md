@@ -1,48 +1,49 @@
-## Http Inspector
+# Http Inspector
 
-A lightweight in-app inspector for `Dio` that logs every request, response and error, and provides a UI to browse details, headers and bodies, as well as copy a ready-to-run cURL command.
+[![pub.dev](https://img.shields.io/pub/v/http_inspector.svg)](https://pub.dev/packages/http_inspector)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.5-02569B?logo=flutter)](https://flutter.dev)
+[![Dio](https://img.shields.io/badge/Dio-%5E5.x-orange)](https://pub.dev/packages/dio)
+
+A lightweight in-app HTTP inspector for Flutter + Dio. Capture every request, response and error in real time — with a built-in UI, pretty JSON viewer, cURL export, and search/filter support.
 
 <img src="assets/screenshots/screenshot_1.png" height="400" />
 <img src="assets/screenshots/screenshot_2.png" height="400" />
 
 ---
 
-### Features
+## Features
 
-- **Real-time logs**: Capture requests, responses, and errors with timestamps and durations
-- **In-app viewer**:`HttpScopeView` to inspect logs in-app
-- **cURL export**: One-click copy of the generated cURL for any request
-- **Pretty JSON**: Formatted request/response bodies and headers
-- **Search/filter UI**: Quickly locate requests with the built-in search components
-- **Console coloring**: Configurable, developer-friendly colored logs
-- **Opt-out in production**: Guard with `kDebugMode` to avoid exposing sensitive info
-
----
-
-### Compatibility
-
-- **Dart**: >= 2.17.6 < 4.0.0
-- **Flutter**: >= 3.0.5
-- **Dio**: ^5.x
+- **Real-time logs** — Capture requests, responses, and errors with timestamps and durations
+- **In-app viewer** — `HttpScopeView` to inspect logs without leaving the app
+- **cURL export** — One-click copy of a ready-to-run cURL command for any request
+- **Pretty JSON** — Formatted request/response bodies and headers
+- **Search & filter** — Locate requests by URL, domain, or keyword
+- **Console coloring** — Configurable colored logs for quick scanning
+- **Production safe** — Guard with `kDebugMode` to avoid exposing sensitive data
 
 ---
 
 ## Installation
 
-Add dependency to your `pubspec.yaml`:
+Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
   http_inspector: ^1.0.2
 ```
 
-Then run `flutter pub get`.
+Then run:
+
+```bash
+flutter pub get
+```
 
 ---
 
 ## Quick Start
 
-1) Add `HttpInspectorInterceptor` to your `Dio` instance:
+**Step 1** — Add the interceptor to your `Dio` instance:
 
 ```dart
 import 'package:dio/dio.dart';
@@ -59,23 +60,22 @@ dio.interceptors.add(
 );
 ```
 
-2) Add the inspector UI to your app:
+**Step 2** — Add the inspector UI to your app:
 
 ```dart
+import 'package:flutter/foundation.dart';
+
 MaterialApp(
   home: Scaffold(
+    // Option A: open via end drawer
     endDrawer: kDebugMode ? const FancyDioInspectorView() : null,
-    body: Center(
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const HttpScopeView(), // or FancyDioInspectorView()
-            ),
-          );
-        },
-        child: const Text('Open Inspector'),
+
+    // Option B: open via navigation
+    body: ElevatedButton(
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const HttpScopeView()),
       ),
+      child: const Text('Open Inspector'),
     ),
   ),
 );
@@ -85,41 +85,33 @@ MaterialApp(
 
 ## Advanced Usage
 
-### Options
+### Interceptor Options
 
 ```dart
 HttpInspectorInterceptor(
   options: const FancyDioInspectorOptions(
-    maxLogs: 200, // keep at most 200 entries in memory
+    maxLogs: 200,
     consoleOptions: FancyDioInspectorConsoleOptions(
       verbose: true,
       colorize: true,
-      requestName: 'REQUEST',
-      responseName: 'RESPONSE',
-      errorName: 'ERROR',
     ),
   ),
-  onRequestCreated: (requestOptions) {
-    // custom hook when a request is recorded
-  },
-  onResponseCreated: (response) {
-    // custom hook when a response is recorded
-  },
-  onErrorCreated: (dioError) {
-    // custom hook when an error is recorded
-  },
+  onRequestCreated: (requestOptions) { /* custom hook */ },
+  onResponseCreated: (response) { /* custom hook */ },
+  onErrorCreated: (dioError) { /* custom hook */ },
 )
 ```
 
-### cURL
+### Access cURL Programmatically
 
-Each `RequestOptions` has a computed `cURL` string. The UI exposes a copy action, and you can also access it programmatically via `requestOptions.cURL`.
+```dart
+// Each request has a computed cURL string
+final curl = requestOptions.cURL;
+```
 
 ---
 
 ## Example App
-
-This repository includes a fully working example under `example/`.
 
 ```bash
 cd example
@@ -129,49 +121,43 @@ flutter run
 
 ---
 
-## Notes on Privacy & Production
+## API Reference
 
-- **Do not log secrets**: Tokens, passwords or PII should not be printed or uploaded.
-- **Guard with `kDebugMode`**: Only enable the inspector in debug/local builds.
-- **Retention**: Entries are stored in-memory and capped by `maxLogs`.
-
----
-
-## API Overview
-
-- **Interceptor**: `HttpInspectorInterceptor`
-- **Options**: `FancyDioInspectorOptions`, `FancyDioInspectorConsoleOptions`, `FancyDioInspectorTileOptions`, `FancyDioInspectorL10nOptions`
-- **Views**: `FancyDioInspectorView`, `HttpScopeView`
-- **Models**: `NetworkRequestModel`, `NetworkResponseModel`, `NetworkErrorModel`, `HttpRecord`
-
-Refer to the source for full API details.
+| Symbol | Type | Description |
+|--------|------|-------------|
+| `HttpInspectorInterceptor` | Interceptor | Attaches to Dio to capture traffic |
+| `FancyDioInspectorOptions` | Options | Configure max logs, console output |
+| `FancyDioInspectorView` | Widget | Full-screen inspector UI |
+| `HttpScopeView` | Widget | Lightweight inspector view |
+| `NetworkRequestModel` | Model | Captured request data |
+| `NetworkResponseModel` | Model | Captured response data |
+| `NetworkErrorModel` | Model | Captured error data |
 
 ---
 
-## Roadmap
+## Privacy & Production
 
-- [x] Display Request Headers in **Key-Value** format  
-- [x] Parse Query parameters into a **list view**  
-- [x] Add **payload display** for POST requests  
-- [x] Bold the URL display item  
-- [x] Add **favorite interface** feature in the list  
-- [x] Add a **clear button**  
-- [x] Add **time grouping by minute**  
-- [x] Add **filter support** for the displayed list  
-- [x] Add **domain-based filter**  
-- [x] Add the ability to **modify query parameters and send requests**  
-  - Should be distinguished from normal network requests, can refer to Charles for interaction  
-- [ ] Add **adaptive functionality** to integrate with other PC-based packet capture tools  
+- Only enable the inspector in debug builds — guard with `kDebugMode`
+- Do not log tokens, passwords, or PII
+- Logs are stored in-memory and capped by `maxLogs`
+
+---
+
+## Compatibility
+
+| Dependency | Version |
+|------------|---------|
+| Dart | >= 2.17.6 < 4.0.0 |
+| Flutter | >= 3.0.5 |
+| Dio | ^5.x |
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Basic workflow:
-
 1. Fork the repo and create a feature branch
 2. Make changes following the existing code style
-3. Run checks
+3. Run checks:
 
 ```bash
 flutter format .
@@ -185,10 +171,8 @@ flutter test
 
 ## License
 
-This project is licensed under the terms of the MIT License. See `LICENSE` for details.
-
----
+MIT — see [LICENSE](LICENSE) for details.
 
 ## Changelog
 
-See `CHANGELOG.md` for release notes.
+See [CHANGELOG.md](CHANGELOG.md) for release notes.
