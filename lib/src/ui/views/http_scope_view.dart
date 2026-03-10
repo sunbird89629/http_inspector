@@ -27,24 +27,11 @@ class HttpScopeView extends StatefulWidget {
 
 class _HttpScopeViewState extends State<HttpScopeView> {
   bool _showOnlyFavorites = false;
-  final bool _isSearch = false;
-  final _searchController = TextEditingController();
-  final _domainFilterController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     MainProvider().viewConfig = widget.viewConfig;
-    _searchController.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _domainFilterController.dispose();
-    super.dispose();
   }
 
   @override
@@ -53,7 +40,6 @@ class _HttpScopeViewState extends State<HttpScopeView> {
       data: context.currentTheme,
       child: Scaffold(
         appBar: _buildAppBar(context),
-        // body: TabBarView(children: tabBarViews),
         body: _buildBody(),
       ),
     );
@@ -62,23 +48,14 @@ class _HttpScopeViewState extends State<HttpScopeView> {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: _isSearch
-          ? TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                hintText: 'Search...',
-                border: InputBorder.none,
-              ),
-            )
-          : ListenableBuilder(
-              listenable: MainProvider(),
-              builder: (context, child) {
-                return Text(
-                  'HttpRecords( ${MainProvider().httpRecords.length} )',
-                );
-              },
-            ),
-      // bottom: TabBar(tabs: tabs),
+      title: ListenableBuilder(
+        listenable: MainProvider(),
+        builder: (context, child) {
+          return Text(
+            'HttpRecords( ${MainProvider().httpRecords.length} )',
+          );
+        },
+      ),
       leading: widget.leading,
       actions: [
         TitleBarActionWidget(
@@ -94,54 +71,41 @@ class _HttpScopeViewState extends State<HttpScopeView> {
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('请长按以清空历史记录'),
+                content: Text('Long-press to clear the log'),
                 duration: Duration(seconds: 3),
               ),
             );
           },
           onLongPress: () {
+            final config = MainProvider().viewConfig;
             MainProvider().updateHttpRecords(
               (records) => records.removeWhere(
-                (record) => !record.isFavorite && !record.isAlwaysStar,
+                (record) =>
+                    !record.isFavorite && !config.alwaysStar(record),
               ),
             );
           },
         ),
-        TitleBarActionWidget(
-          iconData: Icons.help_outline,
-          onPressed: () {
-            const url = 'https://sunbird89629.github.io/http_inspector/manual';
-            final uri = Uri.parse(url);
-            launchUrl(
-              uri,
-              mode: LaunchMode.externalApplication,
-            );
-          },
-        ),
+        if (widget.viewConfig.manualUrl != null)
+          TitleBarActionWidget(
+            iconData: Icons.help_outline,
+            onPressed: () {
+              final uri = Uri.parse(widget.viewConfig.manualUrl!);
+              launchUrl(uri, mode: LaunchMode.externalApplication);
+            },
+          ),
       ],
     );
   }
 
   List<HttpRecord> get recordsShouldToShow {
-    final httpRecords = MainProvider().httpRecords.where(
-      (record) {
-        final filter = MainProvider().viewConfig.recordFilter.call(record);
-        final favorite =
-            !_showOnlyFavorites || record.isFavorite || record.isAlwaysStar;
-        // final search = _searchController.text.isEmpty ||
-        //     record.requestOptions.uri
-        //         .toString()
-        //         .toLowerCase()
-        //         .contains(_searchController.text.toLowerCase());
-        // final domain = _domainFilter == null ||
-        //     record.requestOptions.uri.host
-        //         .toLowerCase()
-        //         .contains(_domainFilter!.toLowerCase());
-        // return filter && favorite && search && domain;
-        return filter && favorite;
-      },
-    ).toList();
-    return httpRecords;
+    final config = MainProvider().viewConfig;
+    return MainProvider().httpRecords.where((record) {
+      final filter = config.recordFilter(record);
+      final favorite =
+          !_showOnlyFavorites || record.isFavorite || config.alwaysStar(record);
+      return filter && favorite;
+    }).toList();
   }
 
   Widget _buildBody() {
@@ -182,7 +146,6 @@ class _HttpScopeViewState extends State<HttpScopeView> {
                   itemCount: records.length,
                   itemBuilder: (context, index) {
                     final model = records[index];
-                    // return HttpRecordItemWidget(model: model);
                     return widget.viewConfig.itemBuilder(context, model);
                   },
                 ),

@@ -36,7 +36,6 @@ class HttpDioLogger {
       MainProvider().insertHttpRecord(
         HttpRecord(requestOptions: data, startTime: now),
       );
-      // _records.insert(0, HttpRecord(requestOptions: data, startTime: now));
     } else if (data is Response) {
       final responseModel = NetworkResponseModel(
         url: data.createUrlComponent(),
@@ -135,5 +134,4 @@ class HttpDioLogger {
       );
     }
   }
-  // List<HttpRecord> get records => _records;
 }

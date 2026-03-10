@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for Clipboard
+import 'package:flutter/services.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
+import 'package:http_inspector/src/providers/main_provider.dart';
 import 'package:http_inspector/src/theme/fancy_colors.dart';
 import 'package:http_inspector/src/ui/views/edit_request_page.dart';
 import 'package:http_inspector/src/ui/widgets/curl_widget.dart';
@@ -12,7 +13,6 @@ import 'package:http_inspector/src/ui/widgets/response_body_widget.dart';
 import 'package:http_inspector/src/ui/widgets/response_header_widget.dart';
 import 'package:http_inspector/src/ui/widgets/title_bar_action_widget.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
-import 'package:http_inspector/src/utils/feishu_send_utils.dart';
 
 class HttpDetailPage extends StatelessWidget {
   const HttpDetailPage({
@@ -24,14 +24,27 @@ class HttpDetailPage extends StatelessWidget {
 
   final HttpRecord model;
 
+  Color get _statusColor {
+    switch (model.statusCode) {
+      case 200:
+        return FancyColors.green;
+      case null:
+        return FancyColors.yellow;
+      default:
+        return FancyColors.red;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final shareAction = MainProvider().viewConfig.onShareAction;
+
     return Theme(
       data: themeData ?? context.currentTheme,
       child: Scaffold(
         backgroundColor: FancyColors.grey,
         appBar: AppBar(
-          backgroundColor: model.statusColor,
+          backgroundColor: _statusColor,
           centerTitle: true,
           title: Text(model.requestOptions.uri.pathSegments.last),
           actions: [
@@ -46,10 +59,10 @@ class HttpDetailPage extends StatelessWidget {
               },
             ),
             TitleBarActionWidget(
-              iconData: Icons.copy, // Copy icon
+              iconData: Icons.copy,
               onPressed: () {
-                final contentToCopy = model.toHttpRequestLog();
-                Clipboard.setData(ClipboardData(text: contentToCopy));
+                final content = model.toHttpRequestLog();
+                Clipboard.setData(ClipboardData(text: content));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('HTTP log copied to clipboard!'),
@@ -57,18 +70,11 @@ class HttpDetailPage extends StatelessWidget {
                 );
               },
             ),
-            TitleBarActionWidget(
-              iconData: Icons.smart_toy,
-              onPressed: () {
-                final contentToSend = model.toHttpRequestLog();
-                // Clipboard.setData(ClipboardData(text: contentToCopy));
-                FeishuSend.sendMessage(contentToSend);
-              },
-            ),
-            // TitleBarActionWidget(
-            //   iconData: Icons.bookmark_add_rounded,
-            //   onPressed: () {},
-            // ),
+            if (shareAction != null)
+              TitleBarActionWidget(
+                iconData: Icons.share,
+                onPressed: () => shareAction(model),
+              ),
           ],
         ),
         body: SingleChildScrollView(

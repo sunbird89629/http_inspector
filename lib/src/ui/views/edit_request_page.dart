@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http_inspector/src/loggers/http_dio_logger.dart';
+import 'package:http_inspector/src/interceptors/interceptors.dart';
 import 'package:http_inspector/src/models/network/http_record.dart';
 
 class EditRequestPage extends StatefulWidget {
@@ -168,22 +168,16 @@ class _EditRequestPageState extends State<EditRequestPage> {
     );
   }
 
-  void _resendRequest() async {
-    final dio = Dio();
+  Future<void> _resendRequest() async {
+    final dio = Dio()..interceptors.add(HttpInspectorInterceptor());
     try {
-      final response = await dio.request(
+      await dio.request<dynamic>(
         _urlController.text,
         data: _bodyController.text,
-        options: Options(
-          method: _method,
-          headers: _headers,
-        ),
+        options: Options(method: _method, headers: _headers),
       );
-      HttpDioLogger.instance.log(response.requestOptions);
-      HttpDioLogger.instance.log(response);
-    } on DioException catch (e) {
-      HttpDioLogger.instance.log(e.requestOptions);
-      HttpDioLogger.instance.log(e);
+    } on DioException catch (_) {
+      // Error is already captured by HttpInspectorInterceptor.
     } finally {
       if (mounted) {
         Navigator.of(context).pop();

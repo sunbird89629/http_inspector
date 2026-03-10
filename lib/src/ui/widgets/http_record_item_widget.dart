@@ -19,6 +19,20 @@ class HttpRecordItemWidget extends StatefulWidget {
 }
 
 class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
+  bool get _isAlwaysStar =>
+      MainProvider().viewConfig.alwaysStar(widget.record);
+
+  Color get _statusColor {
+    switch (widget.record.statusCode) {
+      case 200:
+        return FancyColors.green;
+      case null:
+        return FancyColors.yellow;
+      default:
+        return FancyColors.red;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -26,7 +40,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
       child: ListTile(
         leading: Container(
           width: 4,
-          color: widget.record.statusColor,
+          color: _statusColor,
         ),
         title: Row(
           children: [
@@ -55,7 +69,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
                   ),
             ),
             const SizedBox(width: 20),
-            buildDurationWidget(context),
+            _buildDurationWidget(context),
           ],
         ),
         subtitle: Text(
@@ -79,7 +93,6 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
         contentPadding: const EdgeInsets.only(right: 2),
         minLeadingWidth: 8,
         onTap: () {
-          // 假设你有一个详情页，比如 NetworkDetailPage
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => HttpDetailPage(model: widget.record),
@@ -92,31 +105,26 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
 
   Widget _buildLoadingIndicator() {
     return Container(
-      constraints: BoxConstraints.tight(
-        const Size(20, 20),
-      ),
+      constraints: BoxConstraints.tight(const Size(20, 20)),
       margin: const EdgeInsets.only(right: 12),
       child: const CircularProgressIndicator.adaptive(),
     );
   }
 
   IconButton _buildStarWidget() {
-    final iconStar = widget.record.run((it) {
-      if (it.isAlwaysStar) {
-        return Icons.stars;
-      } else if (it.isFavorite) {
-        return Icons.star;
-      } else {
-        return Icons.star_border;
-      }
+    final isAlwaysStar = _isAlwaysStar;
+    final isFavorite = widget.record.isFavorite;
+
+    final iconStar = widget.record.run((_) {
+      if (isAlwaysStar) return Icons.stars;
+      if (isFavorite) return Icons.star;
+      return Icons.star_border;
     });
 
     return IconButton(
       icon: Icon(
         iconStar,
-        color: widget.record.isFavorite || widget.record.isAlwaysStar
-            ? Colors.amber
-            : null,
+        color: isFavorite || isAlwaysStar ? Colors.amber : null,
       ),
       onPressed: () {
         MainProvider().updateHttpRecord(() {
@@ -126,7 +134,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
     );
   }
 
-  Row buildDurationWidget(BuildContext context) {
+  Row _buildDurationWidget(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,

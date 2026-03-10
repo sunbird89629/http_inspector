@@ -1,8 +1,4 @@
-import 'dart:ui';
-
 import 'package:dio/dio.dart';
-import 'package:http_inspector/src/providers/main_provider.dart';
-import 'package:http_inspector/src/theme/theme.dart';
 import 'package:http_inspector/src/utils/extensions/extensions.dart';
 
 class HttpRecord {
@@ -46,19 +42,6 @@ class HttpRecord {
 
   bool get isRequesting => response == null && exception == null;
 
-  bool get isAlwaysStar => MainProvider().viewConfig.alwaysStar(this);
-
-  Color get statusColor {
-    switch (statusCode) {
-      case 200:
-        return FancyColors.green;
-      case null:
-        return FancyColors.yellow;
-      default:
-        return FancyColors.red;
-    }
-  }
-
   String get requestBodyPrettyJson {
     return requestOptions.createRequestBody();
   }
@@ -95,7 +78,6 @@ class HttpRecord {
 
     // Headers
     requestOptions.headers.forEach((key, value) {
-      // Escape single quotes in the header value
       final escapedValue = value.toString().replaceAll("'", r"\'\");
       curl.write(" -H '$key: $escapedValue'");
     });
@@ -108,7 +90,6 @@ class HttpRecord {
       } else {
         body = requestOptions.data.toString();
       }
-      // Escape single quotes in the body
       body = body.replaceAll("'", r"\'\");
       curl.write(" -d '$body'");
     }
