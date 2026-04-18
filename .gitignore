@@ -36,3 +36,7 @@ example/android/.gradle/
 example/ios/.symlinks/
 example/ios/Pods/
 example/*.log
+
+# Firebase CLI debug logs
+firebase-debug.log*
+.firebase/
