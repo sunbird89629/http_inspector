@@ -84,10 +84,10 @@ class HttpDetailPage extends StatelessWidget {
               spacing: 8,
               children: [
                 OverviewWidget(model: model),
+                RequestBodyWidget(model: model),
                 _buildResultWidget(),
                 CurlWidget(model: model),
                 RequestHeaderWidget(model: model),
-                RequestBodyWidget(model: model),
                 ResponseHeaderWidget(model: model),
                 const SizedBox(height: 80),
               ],
