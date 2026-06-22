@@ -38,10 +38,7 @@ class _HttpScopeViewState extends State<HttpScopeView> {
   Widget build(BuildContext context) {
     return Theme(
       data: context.currentTheme,
-      child: Scaffold(
-        appBar: _buildAppBar(context),
-        body: _buildBody(),
-      ),
+      child: Scaffold(appBar: _buildAppBar(context), body: _buildBody()),
     );
   }
 
@@ -51,9 +48,7 @@ class _HttpScopeViewState extends State<HttpScopeView> {
       title: ListenableBuilder(
         listenable: MainProvider(),
         builder: (context, child) {
-          return Text(
-            'HttpRecords( ${MainProvider().httpRecords.length} )',
-          );
+          return Text('HttpRecords( ${MainProvider().httpRecords.length} )');
         },
       ),
       leading: widget.leading,
@@ -80,8 +75,7 @@ class _HttpScopeViewState extends State<HttpScopeView> {
             final config = MainProvider().viewConfig;
             MainProvider().updateHttpRecords(
               (records) => records.removeWhere(
-                (record) =>
-                    !record.isFavorite && !config.alwaysStar(record),
+                (record) => !record.isFavorite && !config.alwaysStar(record),
               ),
             );
           },

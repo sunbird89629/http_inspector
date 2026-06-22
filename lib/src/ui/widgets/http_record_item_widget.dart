@@ -7,10 +7,7 @@ import 'package:http_inspector/src/utils/extensions/extensions.dart';
 import 'package:http_inspector/src/utils/extensions/scope_extensions.dart';
 
 class HttpRecordItemWidget extends StatefulWidget {
-  const HttpRecordItemWidget({
-    required this.record,
-    super.key,
-  });
+  const HttpRecordItemWidget({required this.record, super.key});
 
   final HttpRecord record;
 
@@ -19,8 +16,7 @@ class HttpRecordItemWidget extends StatefulWidget {
 }
 
 class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
-  bool get _isAlwaysStar =>
-      MainProvider().viewConfig.alwaysStar(widget.record);
+  bool get _isAlwaysStar => MainProvider().viewConfig.alwaysStar(widget.record);
 
   Color get _statusColor {
     switch (widget.record.statusCode) {
@@ -38,35 +34,32 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
     return ColoredBox(
       color: const Color(0xffFEF7FF),
       child: ListTile(
-        leading: Container(
-          width: 4,
-          color: _statusColor,
-        ),
+        leading: Container(width: 4, color: _statusColor),
         title: Row(
           children: [
             SizedBox(
               width: 80,
               child: Text(
                 widget.record.requestOptions.method,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.w900,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w900),
               ),
             ),
             Text(
               widget.record.statusCode.toString(),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: FancyColors.blue,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: FancyColors.blue,
+              ),
             ),
             const SizedBox(width: 20),
             Text(
               widget.record.startTime?.formattedTimeString() ?? '',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: FancyColors.yellow,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: FancyColors.yellow,
+              ),
             ),
             const SizedBox(width: 20),
             _buildDurationWidget(context),
@@ -76,9 +69,9 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
           widget.record.requestOptions.uri.path,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w500),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -142,15 +135,15 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
         Text(
           widget.record.duration,
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: FancyColors.pink,
-              ),
+            fontWeight: FontWeight.bold,
+            color: FancyColors.pink,
+          ),
         ),
         Text(
           'ms',
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: FancyColors.pink,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall!.copyWith(color: FancyColors.pink),
         ),
       ],
     );
