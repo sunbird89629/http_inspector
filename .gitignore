@@ -40,3 +40,6 @@ example/*.log
 # Firebase CLI debug logs
 firebase-debug.log*
 .firebase/
+
+# macOS
+.DS_Store
