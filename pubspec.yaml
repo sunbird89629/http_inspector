@@ -3,9 +3,9 @@ description: A lightweight in-app HTTP inspector for Dio — real-time logs, in-
 
 version: 0.0.1
 
-homepage: https://github.com/Howard-Wang/http_inspector
-repository: https://github.com/Howard-Wang/http_inspector
-issue_tracker: https://github.com/Howard-Wang/http_inspector/issues
+homepage: https://github.com/sunbird89629/http_inspector
+repository: https://github.com/sunbird89629/http_inspector
+issue_tracker: https://github.com/sunbird89629/http_inspector/issues
 
 screenshots:
   - description: "Request list with search and filter"
