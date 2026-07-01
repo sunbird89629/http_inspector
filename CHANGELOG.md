@@ -1,3 +1,13 @@
+## 1.0.3
+
+### 文档
+- 新增中文 README（`README_zh.md`），英文 README 顶部加语言切换链接。
+
+### 修复
+- 修正 `pubspec.yaml` 中 `homepage` / `repository` / `issue_tracker` 指向的仓库地址（`Howard-Wang` → `sunbird89629`）。
+
+---
+
 ## 0.0.1
 
 首个发布版本。一个面向 Dio 的轻量级应用内 HTTP 抓包工具。
