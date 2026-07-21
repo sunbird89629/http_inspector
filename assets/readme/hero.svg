@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="410" viewBox="0 0 1200 410"
+     role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">http_inspector — an in-app HTTP inspector for Flutter and Dio</title>
+  <desc id="heroDesc">On the left, the package name http_inspector with the line "See every Dio request without leaving the app." On the right, a captured request list: rows with a colored status bar, HTTP method, status code, timestamp and duration — POST 401, GET 200, POST 404, GET 500.</desc>
+
+  <defs>
+    <clipPath id="frame"><rect width="1200" height="410" rx="26"/></clipPath>
+    <clipPath id="listClip"><rect x="712" y="40" width="440" height="330" rx="16"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="410" fill="#0C1413"/>
+
+    <!-- ============ title block ============ -->
+    <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif">
+      <text x="64" y="88" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="13" letter-spacing="2.4" fill="#30D5C8">FLUTTER · DIO INTERCEPTOR</text>
+
+      <text x="63" y="158" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="56" font-weight="700" fill="#F0F4F3" letter-spacing="-1">http_inspector</text>
+
+      <text x="64" y="206" font-size="21" fill="#AEBEBB">See every Dio request without leaving</text>
+      <text x="64" y="234" font-size="21" fill="#AEBEBB">the app — captured live, with headers,</text>
+      <text x="64" y="262" font-size="21" fill="#AEBEBB">pretty JSON and one-tap cURL export.</text>
+
+      <rect x="64" y="290" width="470" height="46" rx="10" fill="#111D1B" stroke="#1E302D"/>
+      <text x="82" y="319" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="15" fill="#8CA6A1">dio.interceptors.add(<tspan fill="#7BE0D6">HttpInspectorInterceptor</tspan>())</text>
+
+      <text x="64" y="372" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+            font-size="14" fill="#5C6B68">MIT · pub.dev/packages/http_inspector · Flutter ≥3.0.5</text>
+    </g>
+
+    <!-- ============ captured request list ============ -->
+    <rect x="712" y="40" width="440" height="330" rx="16" fill="#FEF7FF"/>
+    <g clip-path="url(#listClip)">
+      <!-- title bar -->
+      <rect x="712" y="40" width="440" height="46" fill="#30D5C8"/>
+      <text x="736" y="70" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            font-size="17" font-weight="600" fill="#0C3D39">HttpRecords ( 4 )</text>
+      <g fill="none" stroke="#0C3D39" stroke-width="1.7" stroke-linecap="round" opacity="0.85">
+        <path d="M1058 63 l6 -6 6 6 M1058 60 h12"/>
+        <path d="M1092 58 h16 M1096 63 h12 M1100 68 h8"/>
+      </g>
+
+      <!-- rows: each = left status bar + METHOD + status + time + duration -->
+      <!-- row 1: POST 401 -->
+      <rect x="712" y="86" width="4" height="66" fill="#EA4336"/>
+      <text x="740" y="118" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#1C2523">POST</text>
+      <text x="828" y="118" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#EA4336">401</text>
+      <text x="892" y="118" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#5C6B68">14:54:36</text>
+      <text x="1104" y="118" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#9AA7A4">375 ms</text>
+      <text x="740" y="140" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#6B7A77">/api/login</text>
+      <line x1="712" y1="152" x2="1152" y2="152" stroke="#EDE4EF"/>
+
+      <!-- row 2: GET 200 -->
+      <rect x="712" y="152" width="4" height="66" fill="#34A853"/>
+      <text x="740" y="184" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#1C2523">GET</text>
+      <text x="828" y="184" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#34A853">200</text>
+      <text x="892" y="184" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#5C6B68">14:54:32</text>
+      <text x="1104" y="184" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#9AA7A4">1295 ms</text>
+      <text x="740" y="206" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#6B7A77">/api/campaign-products</text>
+      <line x1="712" y1="218" x2="1152" y2="218" stroke="#EDE4EF"/>
+
+      <!-- row 3: POST 404 -->
+      <rect x="712" y="218" width="4" height="66" fill="#EA4336"/>
+      <text x="740" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#1C2523">POST</text>
+      <text x="828" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#EA4336">404</text>
+      <text x="892" y="250" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#5C6B68">14:56:34</text>
+      <text x="1104" y="250" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#9AA7A4">367 ms</text>
+      <text x="740" y="272" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#6B7A77">/mock/pet/findByStatus</text>
+      <line x1="712" y1="284" x2="1152" y2="284" stroke="#EDE4EF"/>
+
+      <!-- row 4: GET 500 -->
+      <rect x="712" y="284" width="4" height="66" fill="#FBBC07"/>
+      <text x="740" y="316" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#1C2523">GET</text>
+      <text x="828" y="316" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" fill="#C79400">302</text>
+      <text x="892" y="316" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#5C6B68">14:56:33</text>
+      <text x="1104" y="316" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#9AA7A4">402 ms</text>
+      <text x="740" y="338" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#6B7A77">/api/session/refresh</text>
+    </g>
+  </g>
+</svg>

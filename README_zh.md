@@ -1,63 +1,36 @@
-# Http Inspector
+<p align="center">
+  <img src="assets/readme/hero.svg" width="100%"
+       alt="http_inspector —— 不离开 App 就能看到每一个 Dio 请求，实时抓取，含请求头、JSON 美化与一键 cURL 导出">
+</p>
 
-[![pub.dev](https://img.shields.io/pub/v/http_inspector.svg)](https://pub.dev/packages/http_inspector)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.5-02569B?logo=flutter)](https://flutter.dev)
-[![Dio](https://img.shields.io/badge/Dio-%5E5.x-orange)](https://pub.dev/packages/dio)
+<p align="center">
+  <a href="README.md">English</a> · <b>简体中文</b>
+</p>
 
-**语言**：[English](README.md) · **简体中文**
+<p align="center">
+  <a href="https://pub.dev/packages/http_inspector"><img alt="pub.dev" src="https://img.shields.io/pub/v/http_inspector.svg?color=30D5C8"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-30D5C8"></a>
+  <a href="https://flutter.dev"><img alt="Flutter ≥3.0.5" src="https://img.shields.io/badge/flutter-%E2%89%A53.0.5-02569B?logo=flutter"></a>
+  <a href="https://pub.dev/packages/dio"><img alt="Dio 5.x" src="https://img.shields.io/badge/dio-%5E5.x-E57C00"></a>
+</p>
 
-轻量级 Flutter 应用内 HTTP 抓包工具，专为 Dio 打造。实时捕获请求、响应与错误，内置可视化 UI、JSON 美化、cURL 一键导出、搜索过滤 —— 让调试网络请求这件事不用再离开 App。
+给 `Dio` 挂上一个拦截器，之后每一个请求、响应和错误都会被实时抓取。在 App 内部打开内置面板，就能看到完整往返——状态码、耗时、请求头、美化后的 JSON——还能把任意一次调用复制成可直接运行的 cURL 命令。
 
-<img src="assets/screenshots/screenshot_1.png" height="400" />
-<img src="assets/screenshots/screenshot_2.png" height="400" />
+不用代理，不用桌面工具，也不用离开 App。
 
----
-
-## 为什么用它
-
-在 Flutter 项目里调试网络请求，你可能遇到过：
-
-- 用 Charles / Proxyman 抓包，但真机上配代理太麻烦，HTTPS 还要装证书
-- 打 `print(response.data)`，日志被淹没在其他输出里
-- 想复现 Bug，得手动复制 URL、Header、Body 拼 cURL
-
-`http_inspector` 直接在 App 内部打开一个「网络面板」，能看到所有请求详情、复制 cURL 交给后端复现、也能在离线设备上快速定位问题。**装在 Dio 上一行代码就跑起来。**
-
----
-
-## 功能特性
-
-- 🔴 **实时日志** —— 请求、响应、错误全捕获，带时间戳和耗时
-- 📱 **应用内查看** —— `HttpScopeView` 直接嵌入 App，无需切走
-- 📋 **cURL 导出** —— 任意请求一键复制成可运行的 cURL 命令
-- 🎨 **JSON 美化** —— 请求/响应体和 Header 格式化展示
-- 🔍 **搜索过滤** —— 按 URL、域名、关键字定位请求
-- 🌈 **彩色控制台** —— 可配置的彩色日志，扫一眼就知道成败
-- 🔒 **生产环境安全** —— 用 `kDebugMode` 守护，避免泄漏敏感数据
-
----
+<img src="assets/readme/proof.png" width="100%"
+     alt="抓包面板的两个界面：请求列表，每行用左侧状态色条显示方法、状态码、时间与耗时；以及请求详情，含 Overview、Response Body、cURL 和请求头等分区。">
 
 ## 安装
 
-在 `pubspec.yaml` 中添加：
-
 ```yaml
 dependencies:
-  http_inspector: ^1.0.2
+  http_inspector: ^1.0.3
 ```
 
-然后执行：
+## 两步跑起来
 
-```bash
-flutter pub get
-```
-
----
-
-## 快速上手
-
-### 第 1 步 —— 给 Dio 挂上拦截器
+**第 1 步 · 挂上拦截器** —— 抓包由它完成：
 
 ```dart
 import 'package:dio/dio.dart';
@@ -67,75 +40,90 @@ final dio = Dio();
 
 dio.interceptors.add(
   HttpInspectorInterceptor(
-    options: const FancyDioInspectorOptions(
-      consoleOptions: FancyDioInspectorConsoleOptions(verbose: true),
+    options: const HttpInspectorOptions(
+      maxLogs: 200,
+      consoleOptions: HttpInspectorConsoleOptions(verbose: true),
     ),
   ),
 );
 ```
 
-### 第 2 步 —— 把面板挂到 App 上
+**第 2 步 · 打开面板** —— 从任意位置 push `HttpScopeView`，用 `kDebugMode` 兜住，保证不会带进发布包：
 
 ```dart
 import 'package:flutter/foundation.dart';
 
-MaterialApp(
-  home: Scaffold(
-    // 方式 A：从右侧抽屉呼出（仅 debug 构建）
-    endDrawer: kDebugMode ? const FancyDioInspectorView() : null,
-
-    // 方式 B：手动跳转
-    body: ElevatedButton(
-      onPressed: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const HttpScopeView()),
-      ),
-      child: const Text('打开抓包面板'),
-    ),
-  ),
-);
+if (kDebugMode) {
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => const HttpScopeView()),
+  );
+}
 ```
 
-搞定 —— 现在跑一次网络请求，就能在面板里看到详情。
+集成到此为止。列表、搜索、详情页、cURL 复制都是内置的。
 
----
+## 定制面板
 
-## 进阶用法
-
-### 拦截器完整配置
+`HttpScopeView` 接收一个 `HttpScopeViewConfig`，绝大多数实际定制都在这里发生：
 
 ```dart
-HttpInspectorInterceptor(
-  options: const FancyDioInspectorOptions(
-    maxLogs: 200,                    // 最多保留多少条日志
-    consoleOptions: FancyDioInspectorConsoleOptions(
-      verbose: true,                 // 打印详细日志到控制台
-      colorize: true,                // 彩色输出
-    ),
+HttpScopeView(
+  leading: CloseButton(onPressed: Navigator.of(context).pop),
+  viewConfig: HttpScopeViewConfig(
+    // 把匹配的请求钉在顶部；清理时也不会被清掉。
+    alwaysStar: (record) => record.url.contains('/login'),
+
+    // 只看你关心的请求。
+    recordFilter: (record) => record.host == 'api.example.com',
+
+    // 在详情页加一个分享按钮 → 把记录发到任意地方。
+    onShareAction: (record) async {
+      await myWebhook.post(record.toHttpRequestLog());
+    },
+
+    // 让帮助按钮指向你自己的文档。
+    manualUrl: 'https://example.com/debugging',
   ),
-  onRequestCreated: (requestOptions) {
-    // 请求发出前的钩子（打点、埋点、修改参数等）
-  },
-  onResponseCreated: (response) {
-    // 响应回来后的钩子
-  },
-  onErrorCreated: (dioError) {
-    // 错误发生时的钩子（上报到 Sentry / Firebase 等）
-  },
 )
 ```
 
-### 代码里直接拿 cURL
+| 字段 | 类型 | 作用 |
+| --- | --- | --- |
+| `recordFilter` | `bool Function(HttpRecord)` | 哪些记录显示出来，默认全部。 |
+| `alwaysStar` | `bool Function(HttpRecord)` | 始终置顶、不可被清理的记录。 |
+| `itemBuilder` | `Widget Function(BuildContext, HttpRecord)` | 列表行的自定义 widget。 |
+| `customFilters` | `List<SingleFilter>` | 叠加在 `recordFilter` 之上的额外条件。 |
+| `onShareAction` | `Future<void> Function(HttpRecord)?` | 设置后显示分享按钮，为 `null` 时隐藏。 |
+| `manualUrl` | `String?` | 帮助按钮打开的 URL，为 `null` 时隐藏。 |
+
+### 拦截器回调
+
+`HttpInspectorInterceptor` 还会把每个事件转发出来，方便你自己记录或上报：
 
 ```dart
-final curl = requestOptions.cURL;
-// 现在可以打日志、发给后端、写到剪贴板等等
+HttpInspectorInterceptor(
+  onRequestCreated: (requestOptions) { /* ... */ },
+  onResponseCreated: (response)      { /* ... */ },
+  onErrorCreated: (dioError)         { /* ... */ },
+)
 ```
 
----
+### 控制台输出
 
-## 示例项目
+`HttpInspectorConsoleOptions` 控制与 UI 并行的终端日志——用 `verbose` 开关，用 `colorize` 及各类颜色（`requestColor`、`responseColor`、`errorColor`）让日志一眼可辨。
 
-仓库自带 `example/`，直接跑：
+## 公开 API
+
+| 符号 | 类别 | 用途 |
+| --- | --- | --- |
+| `HttpInspectorInterceptor` | Dio `Interceptor` | 挂到 `Dio` 上抓取流量 |
+| `HttpInspectorOptions` | 配置 | `maxLogs`、各类日志开关、控制台选项 |
+| `HttpInspectorConsoleOptions` | 配置 | 终端日志：详细程度与颜色 |
+| `HttpScopeView` | Widget | 抓包面板界面 |
+| `HttpScopeViewConfig` | 配置 | 筛选、置顶、自定义行、分享、帮助 URL |
+| `HttpRecord` | 模型 | 一次完整往返——请求、响应/错误、耗时、`cURL` |
+
+## 运行示例
 
 ```bash
 cd example
@@ -143,62 +131,34 @@ flutter pub get
 flutter run
 ```
 
----
-
-## API 速查
-
-| 名称 | 类型 | 说明 |
-|------|------|------|
-| `HttpInspectorInterceptor` | Interceptor | 挂到 Dio 上捕获流量 |
-| `FancyDioInspectorOptions` | Options | 配置日志上限、控制台输出等 |
-| `FancyDioInspectorView` | Widget | 全屏抓包面板 |
-| `HttpScopeView` | Widget | 轻量版抓包面板 |
-| `NetworkRequestModel` | Model | 请求数据模型 |
-| `NetworkResponseModel` | Model | 响应数据模型 |
-| `NetworkErrorModel` | Model | 错误数据模型 |
-
----
+示例会发出几个真实的 Dio 请求（其中部分故意失败），你可以看着它们落进列表。
 
 ## 隐私与生产环境
 
-- **只在 debug 构建里启用面板** —— 用 `kDebugMode` 或自己的 flag 守护
-- **不要记录敏感数据** —— token、密码、身份证号等要在拦截器里脱敏
-- 日志存在内存中，`maxLogs` 控制上限，不会写盘
+面板会暴露完整的请求与响应 Body，务必把它挡在发布包之外：
 
----
+- 每个入口都用 `kDebugMode` 兜住，如上所示。
+- 不要指望它去脱敏 token 或 PII——它展示的就是 Dio 实际发送的内容。
+- 记录只存在内存中，上限由 `maxLogs` 控制（默认 `50`）。
 
 ## 兼容性
 
 | 依赖 | 版本 |
-|------|------|
-| Dart | >= 2.17.6, < 4.0.0 |
-| Flutter | >= 3.0.5 |
-| Dio | ^5.x |
-
----
+| --- | --- |
+| Dart | `>=2.17.6 <4.0.0` |
+| Flutter | `>=3.0.5` |
+| Dio | `^5.x` |
 
 ## 贡献
 
-1. Fork 仓库，创建 feature 分支
-2. 遵循现有代码风格进行修改
-3. 提交前跑一遍检查：
-
 ```bash
-flutter format .
+dart format .
 flutter analyze
 flutter test
 ```
 
-4. 提 PR，描述清楚改动动机与影响
-
-详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
-
----
+然后带上清晰的说明开 PR。欢迎提 Issue 与功能建议。
 
 ## 协议
 
-MIT —— 见 [LICENSE](LICENSE)。
-
-## 更新日志
-
-见 [CHANGELOG.md](CHANGELOG.md)。
+MIT —— 见 [LICENSE](LICENSE)。完整发布记录见 [CHANGELOG.md](CHANGELOG.md)。
