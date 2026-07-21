@@ -1,51 +1,38 @@
-# Http Inspector
+<p align="center">
+  <img src="assets/readme/hero.svg" width="100%"
+       alt="http_inspector — see every Dio request without leaving the app, captured live with headers, pretty JSON and one-tap cURL export">
+</p>
 
-**Language**: **English** · [简体中文](README_zh.md)
+<p align="center">
+  <b>English</b> · <a href="README_zh.md">简体中文</a>
+</p>
 
-[![pub.dev](https://img.shields.io/pub/v/http_inspector.svg)](https://pub.dev/packages/http_inspector)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.5-02569B?logo=flutter)](https://flutter.dev)
-[![Dio](https://img.shields.io/badge/Dio-%5E5.x-orange)](https://pub.dev/packages/dio)
+<p align="center">
+  <a href="https://pub.dev/packages/http_inspector"><img alt="pub.dev" src="https://img.shields.io/pub/v/http_inspector.svg?color=30D5C8"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-30D5C8"></a>
+  <a href="https://flutter.dev"><img alt="Flutter ≥3.0.5" src="https://img.shields.io/badge/flutter-%E2%89%A53.0.5-02569B?logo=flutter"></a>
+  <a href="https://pub.dev/packages/dio"><img alt="Dio 5.x" src="https://img.shields.io/badge/dio-%5E5.x-E57C00"></a>
+</p>
 
-A lightweight in-app HTTP inspector for Flutter + Dio. Capture every request, response and error in real time — with a built-in UI, pretty JSON viewer, cURL export, and search/filter support.
+Add one interceptor to your `Dio` instance and every request, response, and error is captured
+as it happens. Open the built-in panel from inside your app to read the full exchange — status,
+timing, headers, pretty-printed JSON — and copy any call as a runnable cURL command.
 
-<img src="assets/screenshots/screenshot_1.png" height="400" />
-<img src="assets/screenshots/screenshot_2.png" height="400" />
+No proxy, no desktop tool, no leaving the app.
 
----
+<img src="assets/readme/proof.png" width="100%"
+     alt="Two screens from the inspector: a request list where each row shows method, status code, timestamp and duration with a colored status bar; and a request detail screen with Overview, Response Body, cURL, and headers sections.">
 
-## Features
-
-- **Real-time logs** — Capture requests, responses, and errors with timestamps and durations
-- **In-app viewer** — `HttpScopeView` to inspect logs without leaving the app
-- **cURL export** — One-click copy of a ready-to-run cURL command for any request
-- **Pretty JSON** — Formatted request/response bodies and headers
-- **Search & filter** — Locate requests by URL, domain, or keyword
-- **Console coloring** — Configurable colored logs for quick scanning
-- **Production safe** — Guard with `kDebugMode` to avoid exposing sensitive data
-
----
-
-## Installation
-
-Add to your `pubspec.yaml`:
+## Install
 
 ```yaml
 dependencies:
-  http_inspector: ^1.0.2
+  http_inspector: ^1.0.3
 ```
 
-Then run:
+## Two steps to running
 
-```bash
-flutter pub get
-```
-
----
-
-## Quick Start
-
-**Step 1** — Add the interceptor to your `Dio` instance:
+**1. Attach the interceptor** — this is what captures traffic:
 
 ```dart
 import 'package:dio/dio.dart';
@@ -55,65 +42,92 @@ final dio = Dio();
 
 dio.interceptors.add(
   HttpInspectorInterceptor(
-    options: const FancyDioInspectorOptions(
-      consoleOptions: FancyDioInspectorConsoleOptions(verbose: true),
+    options: const HttpInspectorOptions(
+      maxLogs: 200,
+      consoleOptions: HttpInspectorConsoleOptions(verbose: true),
     ),
   ),
 );
 ```
 
-**Step 2** — Add the inspector UI to your app:
+**2. Open the panel** — push `HttpScopeView` from anywhere, guarded so it never ships to users:
 
 ```dart
 import 'package:flutter/foundation.dart';
 
-MaterialApp(
-  home: Scaffold(
-    // Option A: open via end drawer
-    endDrawer: kDebugMode ? const FancyDioInspectorView() : null,
-
-    // Option B: open via navigation
-    body: ElevatedButton(
-      onPressed: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const HttpScopeView()),
-      ),
-      child: const Text('Open Inspector'),
-    ),
-  ),
-);
+if (kDebugMode) {
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => const HttpScopeView()),
+  );
+}
 ```
 
----
+That's the whole integration. The list, search, detail view, and cURL copy are all built in.
 
-## Advanced Usage
+## Tailoring the panel
 
-### Interceptor Options
+`HttpScopeView` takes an `HttpScopeViewConfig` — this is where most real customization happens:
 
 ```dart
-HttpInspectorInterceptor(
-  options: const FancyDioInspectorOptions(
-    maxLogs: 200,
-    consoleOptions: FancyDioInspectorConsoleOptions(
-      verbose: true,
-      colorize: true,
-    ),
+HttpScopeView(
+  leading: CloseButton(onPressed: Navigator.of(context).pop),
+  viewConfig: HttpScopeViewConfig(
+    // Pin matching requests to the top; they survive "clear".
+    alwaysStar: (record) => record.url.contains('/login'),
+
+    // Show only what you care about.
+    recordFilter: (record) => record.host == 'api.example.com',
+
+    // Adds a share button on the detail page → send a record anywhere.
+    onShareAction: (record) async {
+      await myWebhook.post(record.toHttpRequestLog());
+    },
+
+    // Wire the help button to your own docs.
+    manualUrl: 'https://example.com/debugging',
   ),
-  onRequestCreated: (requestOptions) { /* custom hook */ },
-  onResponseCreated: (response) { /* custom hook */ },
-  onErrorCreated: (dioError) { /* custom hook */ },
 )
 ```
 
-### Access cURL Programmatically
+| Field | Type | What it does |
+| --- | --- | --- |
+| `recordFilter` | `bool Function(HttpRecord)` | Which records appear. Defaults to all. |
+| `alwaysStar` | `bool Function(HttpRecord)` | Records that stay pinned and can't be cleared. |
+| `itemBuilder` | `Widget Function(BuildContext, HttpRecord)` | Custom row widget for the list. |
+| `customFilters` | `List<SingleFilter>` | Extra predicates layered on `recordFilter`. |
+| `onShareAction` | `Future<void> Function(HttpRecord)?` | Shows a share button when set; hidden when `null`. |
+| `manualUrl` | `String?` | URL behind the help button; hidden when `null`. |
+
+### Interceptor hooks
+
+`HttpInspectorInterceptor` also forwards each event, so you can log or forward traffic yourself:
 
 ```dart
-// Each request has a computed cURL string
-final curl = requestOptions.cURL;
+HttpInspectorInterceptor(
+  onRequestCreated: (requestOptions) { /* ... */ },
+  onResponseCreated: (response)      { /* ... */ },
+  onErrorCreated: (dioError)         { /* ... */ },
+)
 ```
 
----
+### Console output
 
-## Example App
+`HttpInspectorConsoleOptions` controls the terminal logging that runs alongside the UI — toggle
+it with `verbose`, and set `colorize` plus per-kind colors (`requestColor`, `responseColor`,
+`errorColor`) for quick scanning.
+
+## Public API
+
+| Symbol | Kind | Purpose |
+| --- | --- | --- |
+| `HttpInspectorInterceptor` | Dio `Interceptor` | Attach to `Dio` to capture traffic |
+| `HttpInspectorOptions` | Options | `maxLogs`, per-kind logging toggles, console options |
+| `HttpInspectorConsoleOptions` | Options | Terminal logging: verbosity and colors |
+| `HttpScopeView` | Widget | The inspector screen |
+| `HttpScopeViewConfig` | Config | Filtering, starring, custom rows, share, help URL |
+| `HttpRecord` | Model | One captured exchange — request, response/error, timing, `cURL` |
+
+## Run the example
 
 ```bash
 cd example
@@ -121,60 +135,34 @@ flutter pub get
 flutter run
 ```
 
----
+It sends a few real Dio calls (some deliberately failing) so you can watch them land in the list.
 
-## API Reference
+## Privacy & production
 
-| Symbol | Type | Description |
-|--------|------|-------------|
-| `HttpInspectorInterceptor` | Interceptor | Attaches to Dio to capture traffic |
-| `FancyDioInspectorOptions` | Options | Configure max logs, console output |
-| `FancyDioInspectorView` | Widget | Full-screen inspector UI |
-| `HttpScopeView` | Widget | Lightweight inspector view |
-| `NetworkRequestModel` | Model | Captured request data |
-| `NetworkResponseModel` | Model | Captured response data |
-| `NetworkErrorModel` | Model | Captured error data |
+The panel exposes full request and response bodies, so keep it out of release builds:
 
----
-
-## Privacy & Production
-
-- Only enable the inspector in debug builds — guard with `kDebugMode`
-- Do not log tokens, passwords, or PII
-- Logs are stored in-memory and capped by `maxLogs`
-
----
+- Guard every entry point with `kDebugMode`, as shown above.
+- Don't rely on it to redact tokens or PII — it shows what Dio sends.
+- Records live in memory only and are capped by `maxLogs` (default `50`).
 
 ## Compatibility
 
 | Dependency | Version |
-|------------|---------|
-| Dart | >= 2.17.6 < 4.0.0 |
-| Flutter | >= 3.0.5 |
-| Dio | ^5.x |
-
----
+| --- | --- |
+| Dart | `>=2.17.6 <4.0.0` |
+| Flutter | `>=3.0.5` |
+| Dio | `^5.x` |
 
 ## Contributing
 
-1. Fork the repo and create a feature branch
-2. Make changes following the existing code style
-3. Run checks:
-
 ```bash
-flutter format .
+dart format .
 flutter analyze
 flutter test
 ```
 
-4. Open a Pull Request with a clear description
-
----
+Then open a PR with a clear description. Issues and feature requests are welcome.
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
-
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for release notes.
+MIT — see [LICENSE](LICENSE). Full release notes in [CHANGELOG.md](CHANGELOG.md).
