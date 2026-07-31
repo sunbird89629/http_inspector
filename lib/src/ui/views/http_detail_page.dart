@@ -52,7 +52,7 @@ class HttpDetailPage extends StatelessWidget {
               iconData: Icons.edit,
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (context) => EditRequestPage(record: model),
                   ),
                 );

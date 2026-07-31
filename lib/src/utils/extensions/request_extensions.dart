@@ -35,11 +35,12 @@ extension CurlExtension on RequestOptions {
 
     final header = headers
         .map((key, value) {
+          String headerValue = value.toString();
           if (key == 'content-type' &&
-              value.toString().contains('multipart/form-data')) {
-            value = 'multipart/form-data;';
+              headerValue.contains('multipart/form-data')) {
+            headerValue = 'multipart/form-data;';
           }
-          return MapEntry(key, "-H '$key: $value'");
+          return MapEntry(key, "-H '$key: $headerValue'");
         })
         .values
         .join(' ');

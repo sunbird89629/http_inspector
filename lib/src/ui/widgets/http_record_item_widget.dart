@@ -94,7 +94,7 @@ class _HttpRecordItemWidgetState extends State<HttpRecordItemWidget> {
         minLeadingWidth: 8,
         onTap: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
+            MaterialPageRoute<void>(
               builder: (context) => HttpDetailPage(model: widget.record),
             ),
           );

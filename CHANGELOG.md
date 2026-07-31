@@ -1,3 +1,12 @@
+## 1.0.4
+
+### 修复
+- 修复 `MaterialPageRoute` 类型推断失败的 lint warning。
+- 修复 `cURL` 生成中对参数重新赋值的 lint warning（`parameter_assignments`）。
+- 将顶层 `docs/` 目录重命名为 `doc/`，符合 Pub 布局惯例。
+
+---
+
 ## 1.0.3
 
 ### 文档
